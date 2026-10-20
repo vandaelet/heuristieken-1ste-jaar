@@ -18,7 +18,7 @@ De opbouw volgt de module *Problem solving* van Level: 4 stappen en 4 heuristiek
 | **Test** | aan/uit door de beheerder, met code, klassen, rondes en resultaten per klas en niveaugroep |
 
 - Onderdelen gaan **stap voor stap** open: 3 juiste oefeningen in een onderdeel openen het volgende. Het aantal kan je aanpassen of uitzetten.
-- **A- en B-stroom apart**: B-stroom krijgt eenvoudigere getallen en geen verdiepingsvragen van A-niveau. Je kiest in *Beheer › Instellingen* welke klassen B-stroom zijn; per leerling kan je het ook aanpassen.
+- **A- en B-stroom apart**: B-stroom krijgt eenvoudigere getallen en geen verdiepingsvragen van A-niveau. Klassen: **1B** (B-stroom) en **1C, 1D** (A-stroom). A-stroomleerlingen kiezen hun niveaugroep (1NG1, 1NG2a–e, 1NG3); B-stroomleerlingen krijgen automatisch niveaugroep *geen*. Welke klassen B-stroom zijn, pas je aan in *Beheer › Instellingen*; per leerling kan je het ook aanpassen. Extra klassen voeg je toe in `KLASSEN` bovenaan `Code.gs`.
 - Alle 40 probleemtypes zijn **eigen vragen** in wedstrijdstijl (geen vragen van Kangoeroe, Wallabie of Level). Elk type maakt telkens nieuwe getallen.
 - De juiste antwoorden en uitwerkingen blijven op de server. Leerlingen zien ze pas na het verbeteren.
 - Namen komen uit het svsl-schoolaccount; leerlingen worden gesorteerd op familienaam.

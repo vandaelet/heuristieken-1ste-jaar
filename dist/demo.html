@@ -1309,7 +1309,7 @@ var SpreadsheetApp = GASFAKE.SpreadsheetApp, Session = GASFAKE.Session, LockServ
    ===================================================================== */
 
 const DOMEIN = 'svsl.be';
-const KLASSEN = ['1B', '1C', '1D', '1E', '1F', '1G', '1H', '1I', '1J'];
+const KLASSEN = ['1B', '1C', '1D'];
 const NIVEAUGROEPEN = ['1NG1', '1NG2a', '1NG2b', '1NG2c', '1NG2d', '1NG2e', '1NG3', 'geen'];
 const STROMEN = ['A', 'B'];
 const HKEYS = ['schets', 'vereenvoudigen', 'uitproberen', 'patroon'];
@@ -1339,14 +1339,14 @@ const DEFAULTS = [
   ['test_open', false, 'TRUE = de test staat open voor leerlingen. Kan je ook aan- en uitzetten in het beheerscherm.'],
   ['test_ronde', 'Ronde 1', 'Naam van de testronde. Een leerling kan per ronde één keer de test maken. Nieuwe ronde = nieuwe kans.'],
   ['test_code', '', 'Toegangscode die je in de klas meedeelt. Leeg = geen code nodig.'],
-  ['test_klassen', '', 'Klassen voor wie de test openstaat, gescheiden door komma\'s (bv. 1B,1C). Leeg = alle klassen.'],
+  ['test_klassen', '', 'Klassen voor wie de test openstaat, gescheiden door komma\'s (bv. 1C,1D). Leeg = alle klassen.'],
   ['test_per_niveau', 4, 'Aantal testvragen per puntenniveau (3, 4 en 5 punten). 4 = 12 vragen.'],
   ['test_cesuur', 50, 'Minimum % van de punten om te slagen.'],
   ['test_tijd_min', 50, 'Tijdslimiet van de test in minuten. 0 = geen tijdslimiet.'],
   ['test_filter', true, 'TRUE = leerlingen duiden bij elke testvraag ook aan welke heuristiek(en) ze gebruiken (telt niet mee voor de punten).'],
   ['test_toon_resultaat', true, 'TRUE = leerling ziet na het indienen de score en per heuristiek hoe het ging.'],
   ['oefenen_tijdens_test', false, 'FALSE = leerlingen voor wie de test openstaat, kunnen tijdens die periode niet oefenen.'],
-  ['klassen_b', '', 'Klassen van de B-stroom, gescheiden door komma\'s (bv. 1I,1J). Nieuwe leerlingen van die klassen krijgen stroom B. De stroom per leerling pas je aan in het tabblad Leerlingen.'],
+  ['klassen_b', '1B', 'Klassen van de B-stroom, gescheiden door komma\'s (bv. 1B). Leerlingen van de B-stroom hebben geen niveaugroep. Nieuwe leerlingen van die klassen krijgen stroom B. De stroom per leerling pas je aan in het tabblad Leerlingen.'],
   ['stapsgewijs', true, 'TRUE = een onderdeel gaat pas open als het vorige onderdeel genoeg juiste oefeningen heeft.'],
   ['vrijgeven_aantal', 3, 'Aantal juiste oefeningen in een onderdeel om het volgende onderdeel te openen.'],
   ['reeks_tijd_min', 30, 'Tijd voor een Kangoeroe-reeks van 12 vragen, in minuten. 0 = geen klok.'],
@@ -1555,7 +1555,7 @@ function apiInit() {
   return {
     email, admin, profiel: prof ? { voornaam: prof.voornaam, naam: prof.naam, klas: prof.klas, ng: prof.ng, stroom: prof.stroom } : null,
     voorstel: prof ? null : naamVoorstel_(email),
-    klassen: KLASSEN, niveaugroepen: NIVEAUGROEPEN, info: HEUR.info(), begrijp: HEUR.begrijpItems(),
+    klassen: KLASSEN, niveaugroepen: NIVEAUGROEPEN, klassenB: st.klassen_b, info: HEUR.info(), begrijp: HEUR.begrijpItems(),
     voortgang: vg, open: openOnderdelen_(vg, st, admin),
     regels: { stapsgewijs: st.stapsgewijs, aantal: st.vrijgeven_aantal, reeksTijd: st.reeks_tijd_min, aftrek: st.aftrek_fout },
     test, oefenenGeblokkeerd: !admin && test.voorMij && !test.gedaan && !st.oefenen_tijdens_test, logo: st.logo_url
@@ -1571,8 +1571,10 @@ function apiSaveProfile(p) {
   const nm = String(dir && dir.naam ? dir.naam : p.naam || '').trim().slice(0, 60);
   if (!vn || !nm) throw new Error('Vul je voornaam en je familienaam in.');
   if (KLASSEN.indexOf(p.klas) < 0) throw new Error('Kies je klas.');
-  if (NIVEAUGROEPEN.indexOf(p.ng) < 0) throw new Error('Kies je niveaugroep.');
   const stroom = admin && STROMEN.indexOf(p.stroom) >= 0 ? p.stroom : bestaand ? bestaand.stroom : stroomVoorKlas_(p.klas, st);
+  /* de B-stroom heeft geen niveaugroepen */
+  if (stroom === 'B' && !bestaand) p.ng = 'geen';
+  if (NIVEAUGROEPEN.indexOf(p.ng) < 0) throw new Error('Kies je niveaugroep.');
   const lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     const s = sheet_(SH.ll);
@@ -1963,23 +1965,22 @@ var DEMO = (function () {
   function seedData() {
     Session.setUser(Session.getEffectiveUser().getEmail());
     setup();
-    writeSetting_('klassen_b', '1J');
     writeSetting_('test_open', true);
     writeSetting_('test_ronde', 'Mei 2027');
     writeSetting_('oefenen_tijdens_test', true);
     const ll = sheet_(SH.ll);
     let n = 0;
-    ['1B', '1C', '1D', '1E', '1J'].forEach(klas => {
-      for (let i = 0; i < 8; i++) {
+    ['1B', '1C', '1D'].forEach(klas => {
+      for (let i = 0; i < 12; i++) {
         const vn = pick(VOORNAMEN), nm = pick(NAMEN), email = (nm.replace(/\s/g, '') + '.' + vn + n++).toLowerCase() + '@svsl.be';
-        const r = rnd(), ng = r < 0.3 ? '1NG1' : r < 0.85 ? '1NG2' + pick(['a', 'b', 'c', 'd', 'e']) : r < 0.95 ? '1NG3' : 'geen';
+        const r = rnd(), ng = klas === '1B' ? 'geen' : r < 0.3 ? '1NG1' : r < 0.85 ? '1NG2' + pick(['a', 'b', 'c', 'd', 'e']) : r < 0.95 ? '1NG3' : 'geen';
         const niveau = ng === '1NG1' ? 0.6 : ng === '1NG3' ? 0.9 : 0.78;
         GASFAKE.gids[email] = [vn, nm];
-        ll.appendRow([email, vn, nm, klas, ng, klas === '1J' ? 'B' : 'A', new Date(Date.now() - rnd() * 40 * 864e5)]);
+        ll.appendRow([email, vn, nm, klas, ng, klas === '1B' ? 'B' : 'A', new Date(Date.now() - rnd() * 40 * 864e5)]);
         Session.setUser(email);
         oefen(niveau, 1 + Math.floor(rnd() * 7));
         if (rnd() < 0.7) {
-          const items = testItems_(klas === '1J' ? 'B' : 'A', settings_()), start = new Date(Date.now() - (20 + rnd() * 25) * 60000);
+          const items = testItems_(klas === '1B' ? 'B' : 'A', settings_()), start = new Date(Date.now() - (20 + rnd() * 25) * 60000);
           sheet_(SH.sess).appendRow([email, 'Mei 2027', start, JSON.stringify(items), '[]', 'bezig', rnd() < 0.15 ? Math.ceil(rnd() * 3) : 0, start]);
           const ant = items.map(it => { const q = HEUR.make(it.id, it.seed, it.st); return rnd() < 0.08 ? { k: null, h: [] } : { k: antw(q, niveau - (it.pt - 3) * 0.1), h: rnd() < niveau ? [q.hoofd] : ['schets'] }; });
           if (rnd() < 0.93) apiSubmitTest(ant, 0, false); else apiSaveTest(ant.slice(0, 7), 1);
@@ -2172,8 +2173,12 @@ function viewProfiel() {
         '<label>Voornaam<input class="inp" id="pf_vn" autocomplete="given-name" value="' + esc(P.voornaam || '') + '"></label>' +
         '<label>Familienaam<input class="inp" id="pf_nm" autocomplete="family-name" value="' + esc(P.naam || '') + '"></label>') +
     '<label>Klas<select class="sel" id="pf_kl"><option value="">– kies –</option>' + I.klassen.map(k => '<option' + (k === P.klas ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
-    '<label>Niveaugroep<select class="sel" id="pf_ng"><option value="">– kies –</option>' + I.niveaugroepen.map(k => '<option' + (k === P.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
+    '<label id="pf_ngl">Niveaugroep<select class="sel" id="pf_ng"><option value="">– kies –</option>' + I.niveaugroepen.map(k => '<option' + (k === P.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
     '</div><p class="muted" style="font-size:.85rem">Aangemeld als ' + esc(I.email) + '</p><button class="btn" id="pf_ok">Bewaren</button></div></div>';
+  /* B-stroom: geen niveaugroep */
+  const isB = () => (I.klassenB || []).indexOf($('#pf_kl').value) >= 0;
+  const bijKlas = () => { $('#pf_ngl').hidden = isB(); if (isB()) $('#pf_ng').value = 'geen'; };
+  $('#pf_kl').onchange = bijKlas; bijKlas();
   $('#pf_ok').onclick = async () => {
     const p = { voornaam: vast ? P.voornaam : $('#pf_vn').value, naam: vast ? P.naam : $('#pf_nm').value, klas: $('#pf_kl').value, ng: $('#pf_ng').value };
     $('#pf_ok').disabled = true;

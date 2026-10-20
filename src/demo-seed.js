@@ -29,23 +29,22 @@ var DEMO = (function () {
   function seedData() {
     Session.setUser(Session.getEffectiveUser().getEmail());
     setup();
-    writeSetting_('klassen_b', '1J');
     writeSetting_('test_open', true);
     writeSetting_('test_ronde', 'Mei 2027');
     writeSetting_('oefenen_tijdens_test', true);
     const ll = sheet_(SH.ll);
     let n = 0;
-    ['1B', '1C', '1D', '1E', '1J'].forEach(klas => {
-      for (let i = 0; i < 8; i++) {
+    ['1B', '1C', '1D'].forEach(klas => {
+      for (let i = 0; i < 12; i++) {
         const vn = pick(VOORNAMEN), nm = pick(NAMEN), email = (nm.replace(/\s/g, '') + '.' + vn + n++).toLowerCase() + '@svsl.be';
-        const r = rnd(), ng = r < 0.3 ? '1NG1' : r < 0.85 ? '1NG2' + pick(['a', 'b', 'c', 'd', 'e']) : r < 0.95 ? '1NG3' : 'geen';
+        const r = rnd(), ng = klas === '1B' ? 'geen' : r < 0.3 ? '1NG1' : r < 0.85 ? '1NG2' + pick(['a', 'b', 'c', 'd', 'e']) : r < 0.95 ? '1NG3' : 'geen';
         const niveau = ng === '1NG1' ? 0.6 : ng === '1NG3' ? 0.9 : 0.78;
         GASFAKE.gids[email] = [vn, nm];
-        ll.appendRow([email, vn, nm, klas, ng, klas === '1J' ? 'B' : 'A', new Date(Date.now() - rnd() * 40 * 864e5)]);
+        ll.appendRow([email, vn, nm, klas, ng, klas === '1B' ? 'B' : 'A', new Date(Date.now() - rnd() * 40 * 864e5)]);
         Session.setUser(email);
         oefen(niveau, 1 + Math.floor(rnd() * 7));
         if (rnd() < 0.7) {
-          const items = testItems_(klas === '1J' ? 'B' : 'A', settings_()), start = new Date(Date.now() - (20 + rnd() * 25) * 60000);
+          const items = testItems_(klas === '1B' ? 'B' : 'A', settings_()), start = new Date(Date.now() - (20 + rnd() * 25) * 60000);
           sheet_(SH.sess).appendRow([email, 'Mei 2027', start, JSON.stringify(items), '[]', 'bezig', rnd() < 0.15 ? Math.ceil(rnd() * 3) : 0, start]);
           const ant = items.map(it => { const q = HEUR.make(it.id, it.seed, it.st); return rnd() < 0.08 ? { k: null, h: [] } : { k: antw(q, niveau - (it.pt - 3) * 0.1), h: rnd() < niveau ? [q.hoofd] : ['schets'] }; });
           if (rnd() < 0.93) apiSubmitTest(ant, 0, false); else apiSaveTest(ant.slice(0, 7), 1);

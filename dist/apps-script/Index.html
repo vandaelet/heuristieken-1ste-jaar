@@ -541,8 +541,12 @@ function viewProfiel() {
         '<label>Voornaam<input class="inp" id="pf_vn" autocomplete="given-name" value="' + esc(P.voornaam || '') + '"></label>' +
         '<label>Familienaam<input class="inp" id="pf_nm" autocomplete="family-name" value="' + esc(P.naam || '') + '"></label>') +
     '<label>Klas<select class="sel" id="pf_kl"><option value="">– kies –</option>' + I.klassen.map(k => '<option' + (k === P.klas ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
-    '<label>Niveaugroep<select class="sel" id="pf_ng"><option value="">– kies –</option>' + I.niveaugroepen.map(k => '<option' + (k === P.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
+    '<label id="pf_ngl">Niveaugroep<select class="sel" id="pf_ng"><option value="">– kies –</option>' + I.niveaugroepen.map(k => '<option' + (k === P.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
     '</div><p class="muted" style="font-size:.85rem">Aangemeld als ' + esc(I.email) + '</p><button class="btn" id="pf_ok">Bewaren</button></div></div>';
+  /* B-stroom: geen niveaugroep */
+  const isB = () => (I.klassenB || []).indexOf($('#pf_kl').value) >= 0;
+  const bijKlas = () => { $('#pf_ngl').hidden = isB(); if (isB()) $('#pf_ng').value = 'geen'; };
+  $('#pf_kl').onchange = bijKlas; bijKlas();
   $('#pf_ok').onclick = async () => {
     const p = { voornaam: vast ? P.voornaam : $('#pf_vn').value, naam: vast ? P.naam : $('#pf_nm').value, klas: $('#pf_kl').value, ng: $('#pf_ng').value };
     $('#pf_ok').disabled = true;

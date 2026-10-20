@@ -9,12 +9,12 @@ const juist = key => run(`(function(){const m='${key}'.split('|');return HEUR.ma
 
 run("Session.setOwner('juf@svsl.be'); Session.setUser('juf@svsl.be'); setup();");
 ok(run("SpreadsheetApp.getActiveSpreadsheet().getSheets().map(s=>s.getName()).join(',')") === 'Instellingen,Beheerders,Leerlingen,Voortgang,Oefenresultaten,Reeksen,Testresultaten,Testdetail,Testsessies', 'tabbladen aangemaakt');
-run("apiAdminSaveSettings({klassen_b:['1J']})");
+ok(run('settings_().klassen_b').join() === '1B', 'standaard: 1B is B-stroom');
 throws("Session.setUser('x@gmail.com'); apiInit()", /enkel voor accounts/, 'externe accounts geweigerd');
 run("Session.setUser('peeters.lien@svsl.be')");
 ok(run("apiInit().voorstel.naam") === 'Peeters', 'naamvoorstel uit e-mail');
 throws("apiNewPractice('zelfstandig','schets','basis',3)", /klas en niveaugroep/, 'oefenen vraagt eerst profiel');
-ok(run("apiSaveProfile({voornaam:'Lien',naam:'Peeters',klas:'1B',ng:'1NG2a'}).profiel.stroom") === 'A', 'profiel 1B → A-stroom');
+ok(run("apiSaveProfile({voornaam:'Lien',naam:'Peeters',klas:'1C',ng:'1NG2a'}).profiel.stroom") === 'A', 'profiel 1C → A-stroom');
 const i0 = run('apiInit()');
 ok(i0.open.stappen && !i0.open.schets && !i0.open.reeks, 'enkel onderdeel 0 open bij de start');
 throws("apiNewPractice('zelfstandig','schets','basis',3)", /nog niet open/, 'heuristiek 1 nog dicht');
@@ -66,17 +66,17 @@ ok(rr2.punten === 12 - (4 * 4 + 4 * 5) / 4, 'aftrek: fout kost ¼ van de punten 
 
 /* B-stroom */
 run("Session.setUser('de.smet.kobe@svsl.be')");
-ok(run("apiSaveProfile({voornaam:'Kobe',naam:'De Smet',klas:'1J',ng:'1NG1'}).profiel.stroom") === 'B', 'klas 1J → B-stroom');
+ok(run("apiSaveProfile({voornaam:'Kobe',naam:'De Smet',klas:'1B',ng:''}).profiel.stroom") === 'B' && run("profiel_('de.smet.kobe@svsl.be').ng") === 'geen', 'klas 1B → B-stroom, geen niveaugroep');
 run("Session.setUser('juf@svsl.be'); apiAdminSaveSettings({stapsgewijs:true})");
 throws("Session.setUser('de.smet.kobe@svsl.be'); apiStartReeks()", /nog niet open/, 'stapsgewijs weer aan');
 
 /* test */
-run("Session.setUser('juf@svsl.be'); apiAdminSaveSettings({aftrek_fout:false, test_code:'heur', test_klassen:['1B'], test_tijd_min:50}); apiAdminSetTestOpen(true)");
+run("Session.setUser('juf@svsl.be'); apiAdminSaveSettings({aftrek_fout:false, test_code:'heur', test_klassen:['1C'], test_tijd_min:50}); apiAdminSetTestOpen(true)");
 run("Session.setUser('peeters.lien@svsl.be')");
 const ti = run('apiInit()');
-ok(ti.test.voorMij && ti.oefenenGeblokkeerd, 'test open voor 1B, oefenen geblokkeerd');
+ok(ti.test.voorMij && ti.oefenenGeblokkeerd, 'test open voor 1C, oefenen geblokkeerd');
 throws("apiNewPractice('zelfstandig','schets','basis',3)", /test staat open/, 'oefenen tijdens test geweigerd');
-throws("Session.setUser('de.smet.kobe@svsl.be'); apiStartTest('HEUR')", /niet open voor jouw klas/, 'test niet open voor 1J');
+throws("Session.setUser('de.smet.kobe@svsl.be'); apiStartTest('HEUR')", /niet open voor jouw klas/, 'test niet open voor 1B');
 run("Session.setUser('peeters.lien@svsl.be')");
 throws("apiStartTest('fout')", /code/, 'foute code');
 const t = run("apiStartTest('HEUR')");
@@ -98,9 +98,9 @@ ok(ad.test.length === 1 && ad.test[0]['Venster verlaten'] === 2 && ad.test[0]['S
 ok(ad.voortgang.length === 1 && ad.voortgang[0].schets[0] === 4 && ad.leerlingen[0].naam === 'De Smet', 'voortgang op familienaam gesorteerd');
 ok(run("apiAdminTestDetail('peeters.lien@svsl.be','Ronde 1')").length === 12, 'testdetail 12 rijen');
 ok(run("apiAdminPracticeDetail('peeters.lien@svsl.be')").reeksen.length === 2, 'reeksen per leerling');
-run("apiAdminUpdateStudent('peeters.lien@svsl.be',{klas:'1C',ng:'1NG3',stroom:'B'})");
-ok(run("profiel_('peeters.lien@svsl.be').stroom") === 'B' && run("rows_(SH.ovz).find(r=>r['E-mail']==='peeters.lien@svsl.be')['Klas']") === '1C', 'beheerder past klas en stroom aan');
-run("apiAdminSaveSettings({klassen_b:['1C'], stroom_toepassen:true})");
+run("apiAdminUpdateStudent('peeters.lien@svsl.be',{klas:'1D',ng:'1NG3',stroom:'B'})");
+ok(run("profiel_('peeters.lien@svsl.be').stroom") === 'B' && run("rows_(SH.ovz).find(r=>r['E-mail']==='peeters.lien@svsl.be')['Klas']") === '1D', 'beheerder past klas en stroom aan');
+run("apiAdminSaveSettings({klassen_b:['1D'], stroom_toepassen:true})");
 ok(run("profiel_('de.smet.kobe@svsl.be').stroom") === 'A', 'stroom toepassen op klassen');
 run("apiAdminResetAttempt('peeters.lien@svsl.be','Ronde 1')");
 ok(!run("Session.setUser('peeters.lien@svsl.be'); apiInit().test.gedaan"), 'nieuwe kans na reset');

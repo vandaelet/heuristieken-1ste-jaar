@@ -11,7 +11,7 @@
    ===================================================================== */
 
 const DOMEIN = 'svsl.be';
-const KLASSEN = ['1B', '1C', '1D', '1E', '1F', '1G', '1H', '1I', '1J'];
+const KLASSEN = ['1B', '1C', '1D'];
 const NIVEAUGROEPEN = ['1NG1', '1NG2a', '1NG2b', '1NG2c', '1NG2d', '1NG2e', '1NG3', 'geen'];
 const STROMEN = ['A', 'B'];
 const HKEYS = ['schets', 'vereenvoudigen', 'uitproberen', 'patroon'];
@@ -41,14 +41,14 @@ const DEFAULTS = [
   ['test_open', false, 'TRUE = de test staat open voor leerlingen. Kan je ook aan- en uitzetten in het beheerscherm.'],
   ['test_ronde', 'Ronde 1', 'Naam van de testronde. Een leerling kan per ronde één keer de test maken. Nieuwe ronde = nieuwe kans.'],
   ['test_code', '', 'Toegangscode die je in de klas meedeelt. Leeg = geen code nodig.'],
-  ['test_klassen', '', 'Klassen voor wie de test openstaat, gescheiden door komma\'s (bv. 1B,1C). Leeg = alle klassen.'],
+  ['test_klassen', '', 'Klassen voor wie de test openstaat, gescheiden door komma\'s (bv. 1C,1D). Leeg = alle klassen.'],
   ['test_per_niveau', 4, 'Aantal testvragen per puntenniveau (3, 4 en 5 punten). 4 = 12 vragen.'],
   ['test_cesuur', 50, 'Minimum % van de punten om te slagen.'],
   ['test_tijd_min', 50, 'Tijdslimiet van de test in minuten. 0 = geen tijdslimiet.'],
   ['test_filter', true, 'TRUE = leerlingen duiden bij elke testvraag ook aan welke heuristiek(en) ze gebruiken (telt niet mee voor de punten).'],
   ['test_toon_resultaat', true, 'TRUE = leerling ziet na het indienen de score en per heuristiek hoe het ging.'],
   ['oefenen_tijdens_test', false, 'FALSE = leerlingen voor wie de test openstaat, kunnen tijdens die periode niet oefenen.'],
-  ['klassen_b', '', 'Klassen van de B-stroom, gescheiden door komma\'s (bv. 1I,1J). Nieuwe leerlingen van die klassen krijgen stroom B. De stroom per leerling pas je aan in het tabblad Leerlingen.'],
+  ['klassen_b', '1B', 'Klassen van de B-stroom, gescheiden door komma\'s (bv. 1B). Leerlingen van de B-stroom hebben geen niveaugroep. Nieuwe leerlingen van die klassen krijgen stroom B. De stroom per leerling pas je aan in het tabblad Leerlingen.'],
   ['stapsgewijs', true, 'TRUE = een onderdeel gaat pas open als het vorige onderdeel genoeg juiste oefeningen heeft.'],
   ['vrijgeven_aantal', 3, 'Aantal juiste oefeningen in een onderdeel om het volgende onderdeel te openen.'],
   ['reeks_tijd_min', 30, 'Tijd voor een Kangoeroe-reeks van 12 vragen, in minuten. 0 = geen klok.'],
@@ -257,7 +257,7 @@ function apiInit() {
   return {
     email, admin, profiel: prof ? { voornaam: prof.voornaam, naam: prof.naam, klas: prof.klas, ng: prof.ng, stroom: prof.stroom } : null,
     voorstel: prof ? null : naamVoorstel_(email),
-    klassen: KLASSEN, niveaugroepen: NIVEAUGROEPEN, info: HEUR.info(), begrijp: HEUR.begrijpItems(),
+    klassen: KLASSEN, niveaugroepen: NIVEAUGROEPEN, klassenB: st.klassen_b, info: HEUR.info(), begrijp: HEUR.begrijpItems(),
     voortgang: vg, open: openOnderdelen_(vg, st, admin),
     regels: { stapsgewijs: st.stapsgewijs, aantal: st.vrijgeven_aantal, reeksTijd: st.reeks_tijd_min, aftrek: st.aftrek_fout },
     test, oefenenGeblokkeerd: !admin && test.voorMij && !test.gedaan && !st.oefenen_tijdens_test, logo: st.logo_url
@@ -273,8 +273,10 @@ function apiSaveProfile(p) {
   const nm = String(dir && dir.naam ? dir.naam : p.naam || '').trim().slice(0, 60);
   if (!vn || !nm) throw new Error('Vul je voornaam en je familienaam in.');
   if (KLASSEN.indexOf(p.klas) < 0) throw new Error('Kies je klas.');
-  if (NIVEAUGROEPEN.indexOf(p.ng) < 0) throw new Error('Kies je niveaugroep.');
   const stroom = admin && STROMEN.indexOf(p.stroom) >= 0 ? p.stroom : bestaand ? bestaand.stroom : stroomVoorKlas_(p.klas, st);
+  /* de B-stroom heeft geen niveaugroepen */
+  if (stroom === 'B' && !bestaand) p.ng = 'geen';
+  if (NIVEAUGROEPEN.indexOf(p.ng) < 0) throw new Error('Kies je niveaugroep.');
   const lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     const s = sheet_(SH.ll);
