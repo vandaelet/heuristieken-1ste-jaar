@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heuristieken wiskunde 1ste jaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+<style>
+/* Huisstijl Campus Lievegem – wit, Calibri, turkoois kaders, tussenlijnen turkoois|oranje rond één verticale lijn */
+:root{
+  --f-display:"Calibri","Carlito","Segoe UI",system-ui,sans-serif;
+  --f-body:"Calibri","Carlito","Segoe UI",system-ui,sans-serif;
+  --f-slab:"Calibri","Carlito","Segoe UI",system-ui,sans-serif;
+  --tq:#3bc1c5; --orange:#fcaf17;
+  --hdr:#ffffff; --hdr-ink:#173436; --hdr-soft:#4f6668;
+  --bg:#ffffff; --card:#ffffff; --ink:#173436; --ink-soft:#4f6668;
+  --border:#b3e3e5; --tq-soft:#e8f8f8; --or-soft:#fff3d6; --or-line:#fcd27e;
+  --accent:#3bc1c5; --accent-dark:#127a7f; --accent-soft:#eef9f9; --on-accent:#0f2e30;
+  --coral:#127a7f; --coral-soft:#fff4dc;
+  --ok:#1b7a4a; --ok-bg:#ddf4e7; --bad:#b42318; --bad-bg:#fde4e1; --info:#173436; --info-bg:#fdf1d3;
+  --zone-bg:#f3fafa; --chip-bg:#ffffff;
+  --c1:#1a9aa0; --c2:#c97a00; --c3:#5b5fc7; --c4:#d64f7a; --grid:#dbe9ea; --axis:#7d9497; --fig:#e8f8f8; --fig-line:#1fa6ab;
+  --split:min(calc(50% + 380px), 84%);
+  --duo-fixed:linear-gradient(90deg, var(--tq) 0 var(--split), var(--orange) var(--split) 100%);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --hdr:#0d1b1d; --hdr-ink:#e3f3f3; --hdr-soft:#98b3b5;
+  --bg:#0d1b1d; --card:#132729; --ink:#e3f3f3; --ink-soft:#98b3b5;
+  --border:#28585b; --tq-soft:#143537; --or-soft:#3a2c0e; --or-line:#7a5a14;
+  --accent:#3bc1c5; --accent-dark:#86dde0; --accent-soft:#143537; --on-accent:#062224;
+  --coral:#fcaf17; --coral-soft:#3a2c0e;
+  --ok:#5ad69a; --ok-bg:#123325; --bad:#ff7b72; --bad-bg:#3b1716; --info:#f5c451; --info-bg:#3a2e0e;
+  --zone-bg:#15312f; --chip-bg:#173133;
+  --c1:#21a4a8; --c2:#c98000; --c3:#7377e0; --c4:#d9628f; --grid:#24474a; --axis:#7fa0a3; --fig:#143537; --fig-line:#3bc1c5;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --hdr:#0d1b1d; --hdr-ink:#e3f3f3; --hdr-soft:#98b3b5;
+  --bg:#0d1b1d; --card:#132729; --ink:#e3f3f3; --ink-soft:#98b3b5;
+  --border:#28585b; --tq-soft:#143537; --or-soft:#3a2c0e; --or-line:#7a5a14;
+  --accent:#3bc1c5; --accent-dark:#86dde0; --accent-soft:#143537; --on-accent:#062224;
+  --coral:#fcaf17; --coral-soft:#3a2c0e;
+  --ok:#5ad69a; --ok-bg:#123325; --bad:#ff7b72; --bad-bg:#3b1716; --info:#f5c451; --info-bg:#3a2e0e;
+  --zone-bg:#15312f; --chip-bg:#173133;
+  --c1:#21a4a8; --c2:#c98000; --c3:#7377e0; --c4:#d9628f; --grid:#24474a; --axis:#7fa0a3; --fig:#143537; --fig-line:#3bc1c5;
+  color-scheme:dark;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{ font-family:var(--f-body); font-size:16px; line-height:1.5; background:var(--bg); color:var(--ink); }
+h1,h2,h3{ font-family:var(--f-display); }
+button, input, select, textarea{ font:inherit; color:inherit; }
+[hidden]{ display:none !important; }
+:focus-visible{ outline:3px solid var(--orange); outline-offset:2px; }
+
+/* ---------- kop ---------- */
+header.top{ position:relative; overflow:hidden; background:var(--hdr); color:var(--hdr-ink); padding-inline:16px; padding-block:1.2rem 1.3rem; isolation:isolate; }
+header.top::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--duo-fixed) fixed; }
+header.top .hdr-in{ max-width:1148px; margin:0 auto; display:flex; align-items:center; gap:1.6rem; flex-wrap:wrap; position:relative; z-index:2; padding-right:150px; }
+header.top .logo-clip{ display:block; flex:none; width:220px; overflow:hidden; transition:width .25s ease; }
+header.top .logo-clip .logo{ width:220px; max-width:none; height:auto; display:block; }
+.logo-txt{ display:flex; align-items:center; gap:12px; width:220px; text-decoration:none; }
+.logo-txt .lmark{ width:44px; height:auto; flex:none; display:block; }
+.logo-txt span{ display:flex; flex-direction:column; line-height:1.05; white-space:nowrap; }
+.logo-txt b{ font-family:var(--f-display); font-weight:700; font-size:1.3rem; color:var(--tq); }
+.logo-txt b i{ font-style:normal; color:var(--orange); }
+.logo-txt em{ font-style:italic; font-size:1rem; color:var(--hdr-soft); }
+header.top .hdr-txt{ flex:1; min-width:0; padding-left:1.4rem; border-left:3px solid var(--tq); transition:margin .25s ease; }
+header.top .eyebrow{ font-weight:700; font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin:0 0 .3rem; }
+header.top h1{ margin:0; font-size:clamp(1.35rem,2.6vw,2rem); font-weight:700; line-height:1.15; text-wrap:balance; color:var(--hdr-ink); }
+header.top h1 em{ font-style:normal; color:var(--tq); }
+header.top .tagline{ font-family:var(--f-slab); font-style:italic; font-size:1.12rem; color:var(--hdr-soft); margin:.4rem 0 0; }
+header.top .deco{ position:absolute; right:max(16px, calc((100% - 1180px) / 2)); top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:2px; height:96px; z-index:1; pointer-events:none; }
+header.top .deco .sparkles{ width:56px; height:78px; overflow:visible; }
+header.top .deco .markwrap{ position:relative; display:block; height:82px; }
+header.top .deco .mark{ height:82px; width:auto; display:block; }
+header.top .deco .mstar{ position:absolute; left:71.62%; top:1.11%; width:28.38%; height:auto; transform-origin:50% 50%; animation:twinkle 3.2s ease-in-out infinite .6s; }
+header.top .star{ fill:var(--orange); transform-box:fill-box; transform-origin:center; animation:twinkle 3.2s ease-in-out infinite; }
+header.top .star.s2{ animation-delay:1.1s; } header.top .star.s3{ animation-delay:2.1s; }
+@keyframes twinkle{ 0%,100%{ transform:scale(1) rotate(0); opacity:1; } 50%{ transform:scale(.7) rotate(18deg); opacity:.65; } }
+@media (max-width:900px){ header.top .deco{ display:none; } header.top .hdr-in{ padding-right:0; } }
+@media (max-width:640px){ header.top .hdr-txt{ padding-left:.9rem; flex-basis:100%; } header.top .logo-clip, header.top .logo-clip .logo, .logo-txt{ width:180px; } .logo-txt b{ font-size:1.08rem; } .logo-txt .lmark{ width:36px; } }
+@media (prefers-reduced-motion: reduce){ header.top .star, header.top .deco .mstar{ animation:none; } }
+
+/* ---------- zijbalk en inhoud ---------- */
+.shell{ max-width:1180px; margin:0 auto; padding-inline:16px; display:grid; grid-template-columns:calc(220px + 1.6rem + 3px) minmax(0,1fr); gap:28px; align-items:start; transition:grid-template-columns .25s ease, gap .25s ease; }
+body.no-nav .shell{ grid-template-columns:minmax(0,1fr); }
+nav.side{ position:sticky; top:0; padding-block:1.2rem; max-height:100vh; overflow-y:auto; border-right:3px solid var(--tq); padding-right:.8rem; }
+nav.side .nav-toggle, nav.side .tts-btn, .tts-inline{ display:flex; align-items:center; gap:.5rem; width:100%; margin:0 0 .6rem; padding:.42rem .7rem; border:2px solid var(--tq); border-radius:999px; background:var(--card); color:var(--accent-dark); font-size:.92rem; font-weight:800; cursor:pointer; }
+.tts-inline{ width:auto; margin:0; }
+nav.side .nav-toggle:hover, nav.side .tts-btn:hover, nav.side .tts-btn[aria-pressed="true"], .tts-inline:hover, .tts-inline[aria-pressed="true"]{ border-color:var(--orange); background:var(--or-soft); color:var(--ink); }
+nav.side .nav-toggle svg, nav.side .tts-btn svg, .tts-inline svg{ width:20px; height:20px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .25s ease; }
+body.nav-collapsed nav.side .nav-toggle svg{ transform:scaleX(-1); }
+nav.side ol{ list-style:none; margin:.4rem 0 0; padding:0; display:flex; flex-direction:column; gap:.2rem; }
+nav.side li.sep{ height:2px; background:var(--duo-fixed) fixed; margin:.55rem 0; }
+nav.side ol button{ display:flex; align-items:center; gap:.55rem; width:100%; text-align:left; border:none; background:none; border-radius:.6rem; padding:.42rem .5rem; cursor:pointer; color:var(--ink); border-left:4px solid transparent; }
+nav.side ol button:hover{ background:var(--or-soft); }
+nav.side ol button[aria-current="page"]{ background:var(--tq-soft); border-left-color:var(--orange); color:var(--accent-dark); font-weight:700; }
+nav.side .ic{ width:30px; height:30px; flex:none; display:grid; place-items:center; background:var(--accent-soft); color:var(--accent-dark); border-radius:50% 50% 50% 14%; }
+nav.side .ic svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+nav.side .nr{ font-weight:700; color:var(--ink); min-width:.7rem; }
+nav.side .lbl{ line-height:1.2; }
+.content{ min-width:0; }
+.topline{ display:flex; justify-content:flex-end; padding-top:1rem; }
+.whoami{ color:var(--ink-soft); font-size:.92rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+.whoami b{ color:var(--ink); font-weight:700; }
+@media (min-width:881px){
+  body.nav-collapsed .shell{ grid-template-columns:76px minmax(0,1fr); gap:20px; max-width:none; }
+  body.nav-collapsed header.top .hdr-in{ max-width:none; }
+  body.nav-collapsed header.top .logo-clip{ width:56px; }
+  body.nav-collapsed header.top .hdr-txt{ margin-left:calc(17px - 1.6rem); }
+  body.nav-collapsed nav.side .nav-toggle, body.nav-collapsed nav.side .tts-btn{ justify-content:center; padding:.42rem 0; }
+  body.nav-collapsed nav.side .t, body.nav-collapsed nav.side .lbl{ display:none; }
+  body.nav-collapsed nav.side ol button{ gap:.3rem; padding:.42rem .2rem; justify-content:center; }
+}
+@media (max-width:880px){
+  .shell{ grid-template-columns:minmax(0,1fr); gap:0; }
+  nav.side{ position:static; max-height:none; overflow:visible; border-right:none; padding:.9rem 0 .7rem; border-bottom:3px solid transparent; background:linear-gradient(var(--bg),var(--bg)) padding-box, var(--duo-fixed) fixed border-box; }
+  nav.side .btnrow{ display:flex; gap:.5rem; }
+  nav.side .nav-toggle, nav.side .tts-btn{ width:auto; margin:0; }
+  nav.side ol{ flex-direction:row; flex-wrap:wrap; gap:.3rem; margin-top:.6rem; }
+  nav.side ol button{ width:auto; padding:.3rem .55rem; }
+  nav.side li.sep{ width:2px; height:auto; background:var(--tq); margin:0 .2rem; }
+  body.nav-collapsed nav.side ol{ display:none; }
+  .topline{ justify-content:flex-start; }
+}
+
+main{ padding-block:14px 30px; min-height:55vh; }
+
+/* ---------- algemene componenten ---------- */
+.card, .info-box, .tip{ border:2px solid var(--tq); background:var(--card); border-radius:1rem; padding:1.1rem 1.25rem; margin:0 0 1rem; }
+.card-head h3, .card > h3{ display:flex; align-items:center; gap:.45rem; flex-wrap:wrap; font-weight:700; color:var(--accent-dark); margin:0 0 .5rem; font-size:1.2rem; }
+.card-head h3::before, .card > h3::before{ content:""; width:18px; height:18px; flex:none; background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 12.5c2.6.4 5 2.6 6.6 6.5C12 10 15.4 5.6 21 3c-4.6 4-7.6 9.6-9.4 17.6-.5 1.4-2 1.5-2.7.1C7.7 18 5.6 14.6 3 12.5z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 12.5c2.6.4 5 2.6 6.6 6.5C12 10 15.4 5.6 21 3c-4.6 4-7.6 9.6-9.4 17.6-.5 1.4-2 1.5-2.7.1C7.7 18 5.6 14.6 3 12.5z'/%3E%3C/svg%3E") center/contain no-repeat; }
+.warn{ border-radius:.8rem; padding:.7rem 1rem; background:var(--info-bg); color:var(--info); font-weight:600; margin:0 0 1rem; }
+.err{ border-radius:.8rem; padding:.7rem 1rem; background:var(--bad-bg); color:var(--bad); font-weight:600; margin:0 0 1rem; }
+.muted{ color:var(--ink-soft); }
+.sec-head{ position:relative; padding-bottom:.7rem; margin:0 0 1.1rem; display:flex; flex-wrap:wrap; gap:0 .8rem; align-items:flex-start; }
+.sec-head > h2, .sec-head > p{ flex-basis:100%; }
+.sec-head > div{ flex:1; min-width:0; }
+.sec-head::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--duo-fixed) fixed; border-radius:2px; }
+.sec-head .sec-ic{ width:42px; height:42px; flex:none; display:grid; place-items:center; background:var(--accent-soft); color:var(--accent-dark); border-radius:50% 50% 50% 14%; margin-top:.15rem; }
+.sec-head .sec-ic svg{ width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.sec-head h2{ margin:0; font-size:1.6rem; line-height:1.2; }
+.sec-head h2 .num{ color:var(--ink); }
+.sec-head p{ margin:.25rem 0 0; color:var(--ink-soft); }
+.grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+.row{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+.spacer{ flex:1; }
+
+.btn{ display:inline-flex; align-items:center; gap:.4rem; border:2px solid var(--tq); background:var(--tq); color:var(--on-accent); font-weight:800; border-radius:999px; padding:.55rem 1.25rem; cursor:pointer; }
+.btn:hover:not(:disabled){ background:var(--orange); border-color:var(--orange); color:#2b1b00; }
+.btn:disabled{ opacity:.5; cursor:not-allowed; }
+.btn.small{ padding:.3rem .8rem; font-size:.92rem; }
+
+/* alle klikbare vakken: turkoois kader, oranje bij hover */
+.opt:not(.good):not(.wrong), .inp:not(.ok):not(.bad), .sel:not(.ok):not(.bad), .btn.ghost, .tab, .chip, .navq:not(.cur){
+  --fill:var(--card); --line:var(--tq); border:2px solid var(--line); background:var(--fill); }
+.opt:not(.good):not(.wrong):not(:disabled):hover, .inp:not(.ok):not(.bad):hover, .inp:not(.ok):not(.bad):focus, .sel:not(.ok):not(.bad):hover, .sel:not(.ok):not(.bad):focus,
+.btn.ghost:hover:not(:disabled), .tab:hover, .chip:not(:disabled):hover, .navq:not(.cur):hover{ --fill:var(--or-soft); --line:var(--orange); }
+.inp:not(.ok):not(.bad):focus, .sel:not(.ok):not(.bad):focus{ --fill:var(--card); outline:none; box-shadow:0 0 0 3px var(--or-soft); }
+.btn.ghost{ color:var(--ink); font-weight:700; }
+.opt.chosen:not(.good):not(.wrong){ --fill:var(--tq-soft); box-shadow:inset 0 -3px 0 var(--orange); }
+.tab{ border-bottom:none !important; border-radius:.6rem .6rem 0 0; font-weight:800; color:var(--accent-dark); padding:.5rem 1rem; cursor:pointer; }
+.tab[aria-selected="true"]{ --fill:var(--card); --line:var(--orange); border-width:3px; }
+
+/* ---------- vragen ---------- */
+.qwrap{ max-width:820px; }
+.qmeta{ display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; margin-bottom:.6rem; }
+.qbody > *{ margin:0 0 .85rem; }
+.qbody p{ font-size:1.08rem; }
+.qcard{ display:flex; gap:1rem; align-items:center; background:var(--zone-bg); border-radius:1rem; padding:1rem 1.15rem; border-left:5px solid var(--tq); }
+.qcard .ic{ font-size:2.6rem; line-height:1; flex:none; }
+.qcard .ln{ margin:.1rem 0; font-size:1.1rem; }
+.qcard .ln:last-child{ font-weight:700; }
+.note{ font-size:.95rem; color:var(--ink-soft); }
+.tblwrap{ overflow-x:auto; }
+table.qt{ border-collapse:collapse; min-width:50%; font-size:1rem; }
+table.qt th, table.qt td{ border:1px solid var(--border); padding:.4rem .6rem; text-align:center; }
+table.qt thead th{ background:var(--tq-soft); border-bottom:3px solid var(--orange); font-weight:700; }
+table.qt tbody th{ background:var(--zone-bg); text-align:left; font-weight:700; }
+.fig{ background:var(--card); border-radius:.8rem; }
+.fig svg{ display:block; width:100%; height:auto; max-width:620px; }
+.fig .ft{ font-weight:700; margin:0 0 .3rem; }
+.part{ display:flex; flex-wrap:wrap; align-items:center; gap:.45rem; margin:0 0 .75rem; font-size:1.08rem; }
+.inp, .sel{ border:2px solid var(--tq); border-radius:.6rem; padding:.42rem .6rem; width:8.5rem; background:var(--card); }
+td .inp{ width:6.5rem; }
+.sel{ width:auto; min-width:8rem; cursor:pointer; }
+.inp.ok, .sel.ok{ border:2px solid var(--ok); background:var(--ok-bg); }
+.inp.bad, .sel.bad{ border:2px solid var(--bad); background:var(--bad-bg); }
+.juist{ color:var(--ok); font-weight:700; font-size:.95rem; }
+.mcl{ display:grid; gap:.5rem; margin:.3rem 0 .8rem; }
+.mcpre{ font-weight:700; margin:0 0 .3rem; }
+.opt{ text-align:left; border-radius:.8rem; padding:.6rem .9rem; cursor:pointer; display:flex; gap:.6rem; align-items:center; font-size:1.05rem; }
+.opt .dot{ width:18px; height:18px; border-radius:50%; border:2px solid var(--tq); flex:none; }
+.opt.chosen .dot{ background:var(--tq); box-shadow:inset 0 0 0 3px var(--card); }
+.opt.good{ border:2px solid var(--ok); background:var(--ok-bg); }
+.opt.wrong{ border:2px solid var(--bad); background:var(--bad-bg); }
+.feedback{ border-radius:.9rem; padding:.8rem 1rem; margin:.4rem 0 1rem; }
+.feedback.ok{ background:var(--ok-bg); color:var(--ok); }
+.feedback.bad{ background:var(--bad-bg); color:var(--bad); }
+.feedback .ux{ color:var(--ink); margin:.35rem 0 0; font-weight:400; }
+.score{ font-weight:700; color:var(--accent-dark); }
+
+/* ---------- labels ---------- */
+.pill{ display:inline-block; padding:.05rem .6rem; border-radius:999px; background:var(--tq-soft); color:var(--accent-dark); font-weight:700; font-size:.84rem; }
+.pill.or{ background:var(--or-soft); color:var(--ink); }
+
+/* ---------- oefenen ---------- */
+.etcard .etc{ font-weight:700; color:var(--accent-dark); font-size:.84rem; letter-spacing:.08em; }
+.etcard p.t{ font-size:.92rem; color:var(--ink-soft); margin:.2rem 0 .7rem; }
+.chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.chip{ border-radius:999px; padding:.3rem .85rem; cursor:pointer; font-size:.95rem; color:var(--ink); }
+.chip.all{ font-weight:800; color:var(--accent-dark); }
+.chip:disabled{ opacity:.45; cursor:not-allowed; }
+.bar{ height:10px; background:var(--tq-soft); border-radius:99px; overflow:hidden; margin:.3rem 0 .1rem; }
+.bar > i{ display:block; height:100%; background:var(--tq); border-radius:99px; }
+
+/* ---------- test ---------- */
+.testbar{ position:sticky; top:0; z-index:5; padding:.6rem 0; margin-bottom:.6rem; border-bottom:2px solid transparent; background:linear-gradient(var(--bg),var(--bg)) padding-box, var(--duo-fixed) fixed border-box; }
+.timer{ font-weight:700; font-size:1.2rem; color:var(--accent-dark); min-width:5.5rem; }
+.timer.laag{ color:var(--bad); }
+.navqs{ display:flex; flex-wrap:wrap; gap:.3rem; }
+.navq{ width:2.1rem; height:2.1rem; border-radius:.55rem; cursor:pointer; font-weight:700; font-size:.9rem; }
+.navq.done{ --fill:var(--tq-soft) !important; }
+.navq.cur{ border:3px solid var(--orange); background:var(--card); font-weight:800; }
+.etsep{ font-size:.76rem; color:var(--accent-dark); font-weight:700; align-self:center; margin:0 .2rem 0 .4rem; }
+.calc{ position:fixed; right:16px; bottom:16px; width:250px; background:var(--card); border-radius:1rem; padding:.8rem; z-index:20; box-shadow:0 10px 30px rgba(20,50,55,.18); border:2px solid var(--tq); }
+.calc .scr{ background:var(--zone-bg); border-radius:.6rem; padding:.4rem .6rem; text-align:right; min-height:3.2rem; }
+.calc .scr .ex{ font-size:.85rem; color:var(--ink-soft); min-height:1.1rem; word-break:break-all; }
+.calc .scr .rs{ font-size:1.45rem; font-weight:700; word-break:break-all; }
+.calc .keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:.35rem; margin-top:.5rem; }
+.calc .keys button{ padding:.5rem 0; border-radius:.55rem; border:2px solid var(--tq); background:var(--card); cursor:pointer; font-weight:700; }
+.calc .keys button:hover{ background:var(--or-soft); border-color:var(--orange); }
+.calc .keys .eq{ background:var(--tq); color:var(--on-accent); }
+.resgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:.8rem; }
+.resbox{ border-radius:.9rem; padding:.8rem 1rem; border:2px solid var(--tq); background:var(--card); }
+.resbox .big{ font-size:1.7rem; font-weight:700; }
+.yes{ color:var(--ok); font-weight:700; } .no{ color:var(--bad); font-weight:700; }
+
+/* ---------- beheer ---------- */
+.subtabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1rem; border-bottom:3px solid transparent; background:linear-gradient(var(--bg),var(--bg)) padding-box, var(--duo-fixed) fixed border-box; }
+.switch{ display:inline-flex; align-items:center; gap:.7rem; cursor:pointer; font-weight:700; font-size:1.15rem; }
+.switch input{ appearance:none; width:58px; height:32px; border-radius:99px; background:var(--grid); position:relative; cursor:pointer; transition:background .2s; flex:none; margin:0; }
+.switch input::after{ content:""; position:absolute; left:4px; top:4px; width:24px; height:24px; border-radius:50%; background:#fff; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+.switch input:checked{ background:var(--tq); }
+.switch input:checked::after{ left:30px; }
+.form{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.8rem 1.2rem; }
+.form label{ display:flex; flex-direction:column; gap:.25rem; font-weight:700; font-size:.95rem; }
+.form label small{ font-weight:400; color:var(--ink-soft); }
+.form .inp, .form .sel{ width:100%; }
+.klaskeuze{ display:flex; flex-wrap:wrap; gap:.35rem; }
+.klaskeuze label{ display:flex; align-items:center; gap:.25rem; font-weight:600; padding:.2rem .55rem; border-radius:.5rem; border:2px solid var(--tq); cursor:pointer; }
+.klaskeuze label:hover{ border-color:var(--orange); background:var(--or-soft); }
+.filters{ display:flex; flex-wrap:wrap; gap:.6rem; align-items:flex-end; margin-bottom:.8rem; }
+.filters label{ display:flex; flex-direction:column; font-size:.85rem; font-weight:700; color:var(--ink-soft); gap:.2rem; }
+.filters .sel, .filters .inp{ min-width:9rem; width:auto; }
+table.dt{ border-collapse:collapse; width:100%; font-size:.95rem; }
+table.dt th, table.dt td{ padding:.4rem .5rem; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap; }
+table.dt thead th{ background:var(--tq-soft); border-bottom:3px solid var(--orange); cursor:pointer; user-select:none; position:sticky; top:0; }
+table.dt thead th.nos{ cursor:default; }
+table.dt thead th[aria-sort="ascending"]::after{ content:" ▲"; font-size:.7em; color:var(--accent-dark); }
+table.dt thead th[aria-sort="descending"]::after{ content:" ▼"; font-size:.7em; color:var(--accent-dark); }
+table.dt td.num, table.dt th.num{ text-align:right; font-variant-numeric:tabular-nums; }
+table.dt tr:hover td{ background:var(--zone-bg); }
+.dtwrap{ overflow:auto; max-height:70vh; border-radius:.6rem; }
+.pct{ display:inline-block; min-width:3.2rem; text-align:right; }
+.pct.lo{ color:var(--bad); font-weight:700; }
+.linkbtn{ background:none; border:none; color:var(--accent-dark); text-decoration:underline; cursor:pointer; padding:0; font-weight:700; }
+.sumtbl td.num{ font-weight:700; }
+a{ color:var(--accent-dark); }
+dialog{ border:2px solid var(--tq); border-radius:1rem; padding:0; max-width:min(900px,94vw); width:100%; background:var(--card); color:var(--ink); }
+dialog::backdrop{ background:rgba(10,30,32,.45); }
+dialog .dlg{ padding:1.1rem 1.25rem; max-height:85vh; overflow:auto; }
+.toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); background:var(--card); color:var(--ink); border:2px solid var(--orange); padding:.55rem 1.1rem; border-radius:99px; z-index:50; font-weight:700; box-shadow:0 10px 30px rgba(20,50,55,.18); }
+.spinner{ width:34px; height:34px; border-radius:50%; border:4px solid var(--tq-soft); border-top-color:var(--tq); animation:spin 1s linear infinite; margin:2rem auto; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ---------- voorlezen ---------- */
+.tts-toast{ position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%); z-index:200; width:min(560px, calc(100% - 32px)); display:flex; gap:.7rem; align-items:flex-start; background:var(--card); color:var(--ink); border:2px solid var(--orange); border-radius:1rem; padding:.8rem 1rem; box-shadow:0 10px 30px rgba(20,50,55,.18); }
+.tts-toast svg{ width:22px; height:22px; flex:none; fill:none; stroke:var(--accent-dark); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.tts-toast button{ margin-left:auto; flex:none; border:2px solid var(--tq); background:var(--card); color:var(--ink); border-radius:999px; padding:.2rem .7rem; font-weight:700; cursor:pointer; }
+
+/* ---------- voettekst ---------- */
+footer.school{ max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:1.6rem 2.4rem; display:flex; justify-content:center; border-top:3px solid transparent; background:linear-gradient(var(--bg),var(--bg)) padding-box, var(--duo-fixed) fixed border-box; }
+footer.school .flogo{ width:170px; height:auto; display:block; }
+footer.school .logo-txt{ width:auto; }
+
+body.testmodus header.top, body.testmodus nav.side, body.testmodus .topline, body.testmodus footer.school{ display:none; }
+body.testmodus .shell{ grid-template-columns:minmax(0,1fr); }
+@media (max-width:640px){ .qcard{ flex-direction:column; align-items:flex-start; } .calc{ left:16px; right:16px; width:auto; } }
+/* ---------- heuristieken ---------- */
+.qtekst p{ font-size:1.1rem; margin:0 0 .55rem; }
+.fig{ margin:0 0 .8rem; }
+.fig svg{ max-width:440px; }
+.fig text{ font-family:var(--f-body); font-size:13px; fill:var(--ink); }
+.kopts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:.5rem; margin:.5rem 0 .9rem; }
+.opt .let{ width:1.8rem; height:1.8rem; border-radius:50%; display:grid; place-items:center; font-weight:800; background:var(--tq-soft); color:var(--accent-dark); flex:none; }
+.opt.chosen .let{ background:var(--tq); color:var(--on-accent); }
+.opt.good .let{ background:var(--ok); color:#fff; } .opt.wrong .let{ background:var(--bad); color:#fff; }
+.opt:disabled{ cursor:default; }
+.kopts.ro .opt{ cursor:default; }
+.hkeuze{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:.5rem; margin:.4rem 0 .8rem; }
+.hk{ display:flex; gap:.55rem; align-items:center; padding:.5rem .75rem; border-radius:.8rem; border:2px solid var(--tq); background:var(--card); cursor:pointer; font-weight:600; }
+.hk:not(.good):not(.wrong):not(.dis):hover{ border-color:var(--orange); background:var(--or-soft); }
+.hk input{ width:1.15rem; height:1.15rem; accent-color:var(--tq); margin:0; flex:none; }
+.hk.aan:not(.good):not(.wrong){ background:var(--tq-soft); box-shadow:inset 0 -3px 0 var(--orange); }
+.hk.good{ border-color:var(--ok); background:var(--ok-bg); } .hk.wrong{ border-color:var(--bad); background:var(--bad-bg); }
+.hk.dis{ cursor:default; }
+.hk .muted{ font-weight:400; }
+.hk .best{ margin-left:auto; font-size:.78rem; font-weight:800; color:var(--ok); white-space:nowrap; }
+.hic{ width:28px; height:28px; display:grid; place-items:center; background:var(--accent-soft); color:var(--accent-dark); border-radius:50% 50% 50% 14%; flex:none; }
+.hic svg{ width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.stapkop{ font-weight:800; color:var(--accent-dark); margin:.9rem 0 .35rem; font-size:1rem; }
+.tipbox{ background:var(--or-soft); border-left:5px solid var(--orange); border-radius:.6rem; padding:.55rem .85rem; margin:.4rem 0 .8rem; }
+.uitw{ display:grid; gap:.5rem; margin:.5rem 0; }
+.stap{ display:flex; gap:.7rem; align-items:flex-start; padding:.6rem .8rem; border-radius:.8rem; background:var(--zone-bg); }
+.stap p{ margin:.15rem 0 0; }
+.snr{ width:1.9rem; height:1.9rem; border-radius:50%; background:var(--tq); color:var(--on-accent); display:grid; place-items:center; font-weight:800; flex:none; }
+details.uit{ margin:.6rem 0 .2rem; }
+details.uit summary{ cursor:pointer; font-weight:700; color:var(--accent-dark); }
+.flow{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.7rem; margin:.4rem 0 .2rem; }
+.flow .stap{ flex-direction:column; background:var(--card); border:2px solid var(--tq); }
+.route{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; margin-bottom:1rem; }
+.rcard{ border:2px solid var(--tq); border-radius:1rem; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:.35rem; background:var(--card); }
+.rcard h3{ margin:0; font-size:1.15rem; display:flex; gap:.5rem; align-items:center; }
+.rcard .rnr{ font-weight:800; color:var(--accent-dark); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; }
+.rcard p{ margin:0; color:var(--ink-soft); font-size:.95rem; }
+.rcard .row{ margin-top:auto; padding-top:.4rem; }
+.rcard.dicht{ background:var(--zone-bg); }
+.rcard.dicht h3{ color:var(--ink-soft); }
+.bstuk{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; padding:.5rem .7rem; border-radius:.7rem; border:2px solid var(--border); margin:0 0 .45rem; background:var(--card); }
+.bstuk p{ margin:0; flex:1; min-width:220px; font-size:1.05rem; }
+.seg{ display:inline-flex; gap:.25rem; flex-wrap:wrap; }
+.seg .chip{ font-size:.88rem; font-weight:700; padding:.2rem .7rem; }
+.seg .chip[aria-pressed="true"]{ --fill:var(--tq-soft); --line:var(--orange); }
+.bstuk.good{ border-color:var(--ok); background:var(--ok-bg); } .bstuk.wrong{ border-color:var(--bad); background:var(--bad-bg); }
+.bstuk .jl{ font-size:.85rem; font-weight:700; flex-basis:100%; }
+.bstuk.good .jl{ color:var(--ok); } .bstuk.wrong .jl{ color:var(--bad); }
+.sig{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.3rem 0 0; }
+.sig span{ padding:.15rem .7rem; border-radius:999px; background:var(--or-soft); font-weight:600; }
+ul.ws{ margin:.2rem 0 0; padding-left:1.2rem; } ul.ws li{ margin:.15rem 0; }
+nav.side .lock{ margin-left:auto; display:grid; color:var(--ink-soft); }
+nav.side .lock svg{ width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+body.nav-collapsed nav.side .lock{ display:none; }
+.rev{ border-top:1px solid var(--border); padding:.8rem 0 .4rem; }
+.rev:first-of-type{ border-top:none; }
+.rev .qmeta{ margin-bottom:.4rem; }
+.hbar{ display:grid; grid-template-columns:minmax(140px,auto) 1fr 3.4rem; gap:.6rem; align-items:center; margin:.35rem 0; }
+.hbar .bar{ margin:0; }
+.hbar b{ text-align:right; font-variant-numeric:tabular-nums; }
+.ptsep{ font-size:.76rem; color:var(--accent-dark); font-weight:700; align-self:center; margin:0 .2rem 0 .4rem; }
+.oefkop{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:0 0 .7rem; }
+@media (max-width:640px){ .kopts{ grid-template-columns:1fr 1fr; } .hbar{ grid-template-columns:1fr 3.2rem; } .hbar .bar{ grid-column:1/-1; grid-row:2; } }
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="deco" aria-hidden="true">
+    <svg class="sparkles" viewBox="0 0 70 96">
+      <g transform="translate(30 6) scale(.75)"><path class="star" d="M12 1.5l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.8l7.1-.7z"/></g>
+      <g transform="translate(6 38) scale(.55)"><path class="star s2" d="M12 1.5l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.8l7.1-.7z"/></g>
+      <g transform="translate(38 66) scale(.6)"><path class="star s3" d="M12 1.5l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.8l7.1-.7z"/></g>
+    </svg>
+    <span class="markwrap" id="markwrap" hidden></span>
+  </div>
+  <div class="hdr-in">
+    <span class="logo-clip" id="logoTop"></span>
+    <div class="hdr-txt">
+      <p class="eyebrow">Wiskunde · eerste jaar</p>
+      <h1>Problemen oplossen met <em>heuristieken</em></h1>
+      <p class="tagline">Denk na, kies je strategie: tover met talent!</p>
+    </div>
+  </div>
+</header>
+<div class="shell">
+  <nav class="side" aria-label="Onderdelen" id="side" hidden>
+    <div class="btnrow">
+      <button type="button" class="nav-toggle" id="navToggle" aria-controls="nav" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M9 4.5v15M15.5 9.5L13 12l2.5 2.5"/></svg><span class="t">Verberg de onderdelen</span></button>
+      <button type="button" class="tts-btn" id="ttsBtn" aria-pressed="false" title="Voorlezen aan of uit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span class="t">Voorlezen: uit</span></button>
+    </div>
+    <ol id="nav"></ol>
+  </nav>
+  <div class="content">
+    <div class="topline"><div class="whoami" id="whoami"></div></div>
+    <main id="app"><div class="spinner" aria-label="Laden"></div></main>
+  </div>
+</div>
+<footer class="school"><span id="logoBottom"></span></footer>
+<div class="tts-toast" id="ttsToast" role="status" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><div><b>Voorlezen staat aan.</b> Sleep met je muis over een stuk tekst (op een tablet: selecteer de tekst met je vinger). Dat stuk wordt dan voorgelezen. Klik opnieuw op <b>Voorlezen</b> om het uit te zetten.</div><button type="button" id="ttsOk">Ok</button></div>
+
+<script>
+/* ================= hulpfuncties ================= */
+document.body.classList.add('no-nav');
+const $ = (s, el) => (el || document).querySelector(s);
+const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
+const esc = s => String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nl = x => (Math.round(x * 10) / 10).toString().replace('.', ',');
+function api(name) {
+  const args = Array.prototype.slice.call(arguments, 1);
+  if (window.MOCK_API) return new Promise((res, rej) => setTimeout(() => { try { res(window.MOCK_API[name].apply(null, args)); } catch (e) { rej(e); } }, 120));
+  return new Promise((res, rej) => google.script.run.withSuccessHandler(res).withFailureHandler(e => rej(e))[name].apply(null, args));
+}
+function askConfirm(text, ja) {
+  return new Promise(res => {
+    const dlg = document.createElement('dialog');
+    dlg.innerHTML = '<div class="dlg"><p style="margin-top:0">' + esc(text) + '</p><div class="row"><button class="btn" id="cfOk">' + esc(ja || 'Ja') + '</button><button class="btn ghost" id="cfNo">Annuleren</button></div></div>';
+    document.body.appendChild(dlg); dlg.showModal();
+    const done = v => { dlg.close(); dlg.remove(); res(v); };
+    $('#cfOk', dlg).onclick = () => done(true); $('#cfNo', dlg).onclick = () => done(false);
+    dlg.addEventListener('cancel', () => done(false));
+  });
+}
+function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+function errMsg(e) { return (e && (e.message || e)) + ''; }
+function showErr(e, where) { const box = (where || $('#app')); const d = document.createElement('div'); d.className = 'err'; d.textContent = errMsg(e).replace(/^Error:\s*/, ''); box.prepend(d); d.scrollIntoView({ block: 'nearest' }); setTimeout(() => d.remove(), 8000); }
+
+const S = { init: null, tab: 'home', oef: null, run: null, admin: null, adminTab: 'test', sub: {} };
+
+/* Beeldmerk van Campus Lievegem (bolletje, V en ster) in de officiële kleuren */
+const MARK = 'data:image/png;base64,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';
+const MARK_BODY = 'data:image/png;base64,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';
+const MARK_STAR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAABSUlEQVR42rWUvUsDMRiHn/ZeP8DNJaMfg4NOgmDByUHBMeDoWCg6KDgLOrg4iKAuQhdxc4mD4OTSuaB/wk1CFjcVrrF1uUo4rZeT6w8y5E3y5Jc3eQM5ckadUlDVgDmNYUArzqi4bCjAlDOqVTYUYMUZ1cjJ/40z6k5Cju8ZOAGuPMgWsAksADNAW7StVQJu/wMY90Ix8ARsZOLvou0EgFBc02nz1QV2+h35w+EhsAqMBmx0L9peZ/PVBx0D28BkoOseEIu2s9k32ASWgblAV746ou2PNVXRtg5cAA/AC/BZABr99swqA/LZAmrASAA4EW3HcqEe/AA4AqIc8LNouxgETcFJxnF3QDWeibb7Rcu0r0vRNgJugcSL7/3HaQ94FG3XMuO7wDqwBLyKtvMh0E5aJN9lmDO/SQjUGfU2jP/0nDLljGoXXfMFlQVkFycnx1MAAAAASUVORK5CYII=';
+function setLogo(url) {
+  const txt = '<span class="logo-txt" aria-label="Campus Lievegem – Tover met talent"><img class="lmark" src="' + MARK + '" alt=""><span><b>Campus <i>Lievegem</i></b><em>Tover met talent</em></span></span>';
+  $('#logoTop').innerHTML = url ? '<img class="logo" src="' + esc(url) + '" alt="Campus Lievegem – Tover met talent">' : txt;
+  $('#logoBottom').innerHTML = url ? '<img class="flogo" src="' + esc(url) + '" alt="Campus Lievegem – Tover met talent">' : txt;
+  const mw = $('#markwrap');
+  mw.innerHTML = '<img class="mark" src="' + MARK_BODY + '" alt=""><img class="mstar" src="' + MARK_STAR + '" alt="">'; mw.hidden = false;
+}
+
+/* ================= opstart ================= */
+async function start() {
+  setLogo('');
+  try {
+    S.init = await api('apiInit');
+    afterInit();
+  } catch (e) { $('#app').innerHTML = ''; showErr(e); }
+}
+function afterInit() {
+  const I = S.init;
+  setLogo(I.logo);
+  if (!I.profiel && !I.admin) { $('#side').hidden = true; document.body.classList.add('no-nav'); $('#whoami').textContent = ''; return viewProfiel(); }
+  $('#side').hidden = false; document.body.classList.remove('no-nav');
+  $('#whoami').innerHTML = I.profiel ? '<b>' + esc(I.profiel.voornaam + ' ' + I.profiel.naam) + '</b><span class="pill">' + esc(I.profiel.klas) + '</span><span class="pill or">' + esc(I.profiel.ng) + '</span><span class="pill">' + esc(I.profiel.stroom) + '-stroom</span>' + (I.admin ? '<span class="pill or">beheerder</span>' : '')
+    : '<b>' + esc(I.email) + '</b><span class="pill or">beheerder</span>';
+  renderNav();
+  go(S.tab);
+}
+const IC = {
+  home: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  stappen: '<path d="M3.5 20h4.5v-4h4v-4h4V8h4.5"/><path d="M16 4h4.5v4"/>',
+  schets: '<path d="M4 20l4.2-1 11-11-3.2-3.2-11 11z"/><path d="M14 7l3 3"/>',
+  vereenvoudigen: '<path d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5"/>',
+  uitproberen: '<path d="M4 7.5l2.5 2.5L11 5.5"/><path d="M14.5 14.5l5 5M19.5 14.5l-5 5"/><path d="M4 17h6.5M14 7h6"/>',
+  patroon: '<circle cx="5" cy="12" r="1.7"/><circle cx="10.5" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><path d="M19 9l2.5 3-2.5 3"/>',
+  filter: '<path d="M4 5h16l-6.2 7.6V19l-3.6 1.6v-8z"/>',
+  reeks: '<circle cx="12" cy="13.5" r="7"/><path d="M12 10v3.6l2.6 1.6M10 3h4M12 3v3.5"/>',
+  test: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6v3H9zM9 13l2 2 4-4"/>',
+  beheer: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
+};
+const ico = k => '<svg viewBox="0 0 24 24" aria-hidden="true">' + IC[k] + '</svg>';
+const HEURS = () => S.init.info.heuristieken;
+const HOF = k => HEURS().find(h => h.key === k);
+const OEF_TABS = ['stappen', 'schets', 'vereenvoudigen', 'uitproberen', 'patroon', 'filter', 'reeks'];
+function route() {
+  return [['stappen', '0', 'Probleemoplossen in 4 stappen', 'Begrijpen, plannen, uitvoeren, terugkijken.']]
+    .concat(HEURS().map(h => [h.key, String(h.nr), h.naam, h.kort === 'Schets' ? 'Teken de situatie.' : h.kort === 'Vereenvoudigen' ? 'Maak het probleem eenvoudiger.' : h.kort === 'Uitproberen' ? 'Probeer, controleer en schrap.' : 'Zoek wat zich herhaalt.']),
+      [['filter', '5', 'Filtertraining', 'Welke heuristiek past bij welk probleem?'], ['reeks', '6', 'Kangoeroe-reeksen', '12 gemengde vragen met de klok.']]);
+}
+const titelVan = k => (route().find(r => r[0] === k) || [k, '', k])[2];
+function renderNav() {
+  const I = S.init;
+  const items = [['home', '', 'Overzicht']].concat(route().map(r => [r[0], r[1], r[0] === 'stappen' ? '4 stappen' : r[0].length && HOF(r[0]) ? HOF(r[0]).kort : r[0] === 'filter' ? 'Filtertraining' : 'Kangoeroe-reeksen']), [['sep'], ['test', '', 'Test']]);
+  if (I.admin) items.push(['beheer', '', 'Beheer']);
+  $('#nav').innerHTML = items.map(it => it[0] === 'sep' ? '<li class="sep" aria-hidden="true"></li>' :
+    '<li><button type="button" data-nav="' + it[0] + '" title="' + esc((it[1] ? it[1] + '. ' : '') + it[2]) + '"><span class="ic">' + ico(it[0]) + '</span>' + (it[1] ? '<span class="nr">' + it[1] + '</span>' : '') + '<span class="lbl">' + esc(it[2]) + '</span>' +
+    (I.open && I.open[it[0]] === false ? '<span class="lock" title="nog op slot">' + ico('lock') + '</span>' : '') + '</button></li>').join('');
+  markNav();
+}
+function markNav() { $$('#nav [data-nav]').forEach(b => { if (b.dataset.nav === S.tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }); }
+$('#nav').addEventListener('click', e => { const b = e.target.closest('[data-nav]'); if (b) go(b.dataset.nav); });
+function go(tab, sub) {
+  if (S.run && S.run.loopt && tab !== S.run.kind) return toast(S.run.kind === 'test' ? 'Werk eerst je test af.' : 'Dien eerst je reeks in.');
+  S.tab = tab; markNav();
+  if (sub) S.sub[tab] = sub;
+  const I = S.init;
+  if (OEF_TABS.indexOf(tab) >= 0 && I.oefenenGeblokkeerd) viewGeblokkeerd();
+  else if (OEF_TABS.indexOf(tab) >= 0 && !I.open[tab]) viewSlot(tab);
+  else if (tab === 'home') viewHome();
+  else if (tab === 'stappen') viewStappen();
+  else if (HOF(tab)) viewHeur(tab);
+  else if (tab === 'filter') viewFilter();
+  else if (tab === 'reeks') viewReeksHome();
+  else if (tab === 'test') viewTestHome();
+  else if (tab === 'beheer') viewBeheer();
+  window.scrollTo(0, 0);
+}
+function secHead(icon, nr, titel, sub) {
+  return '<div class="sec-head"><span class="sec-ic">' + ico(icon) + '</span><div><h2>' + (nr !== '' && nr !== undefined ? '<span class="num">' + esc(nr) + '</span> ' : '') + esc(titel) + '</h2>' + (sub ? '<p>' + sub + '</p>' : '') + '</div></div>';
+}
+/* vorig onderdeel en hoeveel juiste oefeningen er nog nodig zijn */
+function slotInfo(tab) {
+  const i = OEF_TABS.indexOf(tab), vorig = OEF_TABS[i - 1], R = S.init.regels;
+  const juist = (S.init.voortgang[vorig] || {}).juist || 0;
+  return { vorig, nog: Math.max(0, R.aantal - juist), juist, nodig: R.aantal };
+}
+function viewSlot(tab) {
+  const s = slotInfo(tab), r = route().find(x => x[0] === tab);
+  $('#app').innerHTML = '<div class="qwrap">' + secHead(tab, r[1], r[2]) + '<div class="info-box"><b>Dit onderdeel is nog op slot.</b><p style="margin:.3rem 0 .8rem">Maak eerst nog <b>' + s.nog + '</b> ' + (s.nog === 1 ? 'oefening' : 'oefeningen') + ' juist in <b>' + esc(titelVan(s.vorig)) + '</b>. Dan gaat dit onderdeel vanzelf open.</p><button class="btn" id="naarVorig">Naar ' + esc(titelVan(s.vorig)) + '</button></div></div>';
+  $('#naarVorig').onclick = () => go(s.vorig);
+}
+function viewGeblokkeerd() {
+  $('#app').innerHTML = '<div class="qwrap"><div class="info-box"><b>Oefenen kan nu even niet.</b><p style="margin:.3rem 0 .8rem">De test staat open voor jouw klas. Na de test kan je weer oefenen.</p><button class="btn" id="naarTest">Naar de test</button></div></div>';
+  $('#naarTest').onclick = () => go('test');
+}
+/* nieuwe voortgang van de server verwerken en melden wat er opengaat */
+function nieuweVoortgang(r) {
+  if (!r || !r.voortgang) return;
+  const oud = S.init.open || {};
+  S.init.voortgang = r.voortgang;
+  if (r.open) {
+    S.init.open = r.open;
+    const nieuw = OEF_TABS.filter(k => r.open[k] && !oud[k]);
+    if (nieuw.length) { renderNav(); toast('Nieuw onderdeel open: ' + titelVan(nieuw[0]) + '!'); }
+  }
+}
+
+/* ================= profiel ================= */
+function viewProfiel() {
+  const I = S.init, V = I.voorstel || {}, P = I.profiel || V, vast = V.bron === 'schoolaccount';
+  $('#app').innerHTML = '<div class="qwrap"><div class="sec-head"><h2>Welkom' + (P.voornaam ? ', ' + esc(P.voornaam) : '') + '!</h2><p>Kies eenmalig je klas en je niveaugroep. Kies zorgvuldig: je kan ze daarna niet meer zelf wijzigen.</p></div>' +
+    '<div class="card"><h3>Mijn gegevens</h3>' +
+    (vast ? '<p style="margin:.2rem 0 .9rem;font-size:1.1rem">Je naam: <b>' + esc(P.voornaam + ' ' + P.naam) + '</b> <span class="muted">(uit je schoolaccount)</span></p><div class="form">'
+      : '<p class="muted" style="margin:.2rem 0 .7rem">Kijk je naam na en verbeter hem als het nodig is.</p><div class="form">' +
+        '<label>Voornaam<input class="inp" id="pf_vn" autocomplete="given-name" value="' + esc(P.voornaam || '') + '"></label>' +
+        '<label>Familienaam<input class="inp" id="pf_nm" autocomplete="family-name" value="' + esc(P.naam || '') + '"></label>') +
+    '<label>Klas<select class="sel" id="pf_kl"><option value="">– kies –</option>' + I.klassen.map(k => '<option' + (k === P.klas ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
+    '<label>Niveaugroep<select class="sel" id="pf_ng"><option value="">– kies –</option>' + I.niveaugroepen.map(k => '<option' + (k === P.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
+    '</div><p class="muted" style="font-size:.85rem">Aangemeld als ' + esc(I.email) + '</p><button class="btn" id="pf_ok">Bewaren</button></div></div>';
+  $('#pf_ok').onclick = async () => {
+    const p = { voornaam: vast ? P.voornaam : $('#pf_vn').value, naam: vast ? P.naam : $('#pf_nm').value, klas: $('#pf_kl').value, ng: $('#pf_ng').value };
+    $('#pf_ok').disabled = true;
+    try { S.init = await api('apiSaveProfile', p); afterInit(); } catch (e) { showErr(e); $('#pf_ok').disabled = false; }
+  };
+}
+
+/* ================= vragen tekenen ================= */
+const rich = t => esc(t).replace(/(\d+)\^(\d+)/g, '$1<sup>$2</sup>');
+function lvl(p) { return p >= 5 ? '<span class="pill or">verdieping</span>' : p === 4 ? '<span class="pill or">oefenen</span>' : '<span class="pill">basis</span>'; }
+const LET = 'ABCDE';
+function figSvg(f) {
+  if (!f) return '';
+  const fill = 'fill="var(--fig)" stroke="var(--fig-line)" stroke-width="2.5" stroke-linejoin="round"';
+  const T = (x, y, s, a) => '<text x="' + x + '" y="' + y + '"' + (a ? ' text-anchor="' + a + '"' : '') + '>' + esc(s) + '</text>';
+  let w = 300, h = 200, b = '';
+  if (f.t === 'trap') {
+    const W = f.k * f.sw, H = f.k * f.sh, sc = Math.min(220 / W, 140 / H), x0 = 40, y0 = 20, X = v => x0 + v * sc, Y = v => y0 + v * sc;
+    const p = [[0, H], [W, H], [W, 0]];
+    for (let i = 1; i <= f.k; i++) { const x = W - i * f.sw; p.push([x, (i - 1) * f.sh], [x, i * f.sh]); }
+    w = X(W) + 70; h = Y(H) + 34;
+    b = '<polygon ' + fill + ' points="' + p.map(q => X(q[0]) + ',' + Y(q[1])).join(' ') + '"/>' + T((X(0) + X(W)) / 2, Y(H) + 20, W + ' cm', 'middle') + T(X(W) + 8, (Y(0) + Y(H)) / 2 + 4, H + ' cm') +
+      T((X(W - f.sw) + X(W)) / 2, Y(0) - 6, f.sw + ' cm', 'middle');
+  } else if (f.t === 'hap') {
+    const sc = Math.min(240 / f.l, 140 / f.b), x0 = 44, y0 = 24, X = v => x0 + v * sc, Y = v => y0 + v * sc;
+    const p = [[0, 0], [f.l - f.x, 0], [f.l - f.x, f.y], [f.l, f.y], [f.l, f.b], [0, f.b]];
+    w = X(f.l) + 56; h = Y(f.b) + 32;
+    b = '<polygon ' + fill + ' points="' + p.map(q => X(q[0]) + ',' + Y(q[1])).join(' ') + '"/>' + T((X(0) + X(f.l)) / 2, Y(f.b) + 20, f.l + ' cm', 'middle') + T(X(0) - 6, (Y(0) + Y(f.b)) / 2 + 4, f.b + ' cm', 'end') +
+      T((X(f.l - f.x) + X(f.l)) / 2, Y(f.y) - 6, f.x + ' cm', 'middle') + T(X(f.l) + 6, (Y(0) + Y(f.y)) / 2 + 4, f.y + ' cm');
+  } else if (f.t === 'driehoek') {
+    w = 300; h = 170; const tx = 30 + 240 * f.top / 100;
+    b = '<rect x="30" y="15" width="240" height="140" fill="none" stroke="var(--fig-line)" stroke-width="2.5"/><polygon fill="var(--c1)" fill-opacity=".45" stroke="var(--fig-line)" stroke-width="2.5" points="30,155 270,155 ' + tx + ',15"/>';
+  } else if (f.t === 'diag') {
+    w = 220; h = 190;
+    b = '<rect x="30" y="15" width="160" height="160" fill="none" stroke="var(--fig-line)" stroke-width="2.5"/><polygon fill="var(--c1)" fill-opacity=".45" points="30,15 190,15 110,95"/><polygon fill="var(--c1)" fill-opacity=".45" points="30,175 190,175 110,95"/><path d="M30 15L190 175M190 15L30 175" stroke="var(--fig-line)" stroke-width="2.5"/>';
+  } else if (f.t === 'lucifers') {
+    const s = 34, st = (x1, y1, x2, y2) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="var(--c2)" stroke-width="4" stroke-linecap="round"/><circle cx="' + x2 + '" cy="' + y2 + '" r="3.6" fill="var(--c4)"/>';
+    let x = 14; w = 0;
+    [1, 2, 3].forEach(n => {
+      for (let i = 0; i < n; i++) { const a = x + i * s; b += st(a + 3, 24, a + s - 3, 24) + st(a + 3, 24 + s, a + s - 3, 24 + s) + (i === 0 ? st(a, 27, a, 21 + s) : '') + st(a + s, 27, a + s, 21 + s); }
+      b += T(x + n * s / 2, 24 + s + 26, n + ' vierkantje' + (n > 1 ? 's' : ''), 'middle'); x += n * s + 40;
+    });
+    w = x; h = 110;
+  } else if (f.t === 'blokken') {
+    const s = 20; let x = 14;
+    [1, 2, 3].forEach(n => {
+      for (let c = 0; c < n; c++) for (let r = 0; r <= c; r++) b += '<rect x="' + (x + c * s) + '" y="' + (100 - (r + 1) * s) + '" width="' + s + '" height="' + s + '" ' + fill + '/>';
+      b += T(x + n * s / 2, 122, n + (n > 1 ? ' treden' : ' trede'), 'middle'); x += n * s + 46;
+    });
+    w = x; h = 130;
+  } else if (f.t === 'v') {
+    const d = 18; let x = 20;
+    [1, 2, 3].forEach(n => {
+      const pts = [[0, 0]]; for (let i = 1; i <= n; i++) pts.push([-i, -i], [i, -i]);
+      const cx = x + n * d;
+      pts.forEach(p => { b += '<circle cx="' + (cx + p[0] * d) + '" cy="' + (90 + p[1] * d) + '" r="6" fill="var(--c1)"/>'; });
+      b += T(cx, 118, 'V-vorm ' + n, 'middle'); x += 2 * n * d + 46;
+    });
+    w = x; h = 128;
+  }
+  return '<figure class="fig"><svg viewBox="0 0 ' + Math.round(w) + ' ' + Math.round(h) + '" role="img" aria-label="tekening bij de opgave">' + b + '</svg></figure>';
+}
+function qHtml(q) { return '<div class="qtekst">' + q.tekst.map(t => '<p>' + rich(t) + '</p>').join('') + '</div>' + figSvg(q.fig); }
+function optsHtml(q, ro) {
+  return '<div class="kopts' + (ro ? ' ro' : '') + '" role="radiogroup" aria-label="Antwoorden">' + q.opties.map((t, i) => '<button type="button" class="opt" role="radio" aria-checked="false" data-o="' + i + '"' + (ro ? ' disabled' : '') + '><span class="let">' + LET[i] + '</span><span>' + rich(t) + '</span></button>').join('') + '</div>';
+}
+function bindOpts(el, cb) {
+  $$('.opt', el).forEach(b => b.onclick = () => {
+    if (b.disabled) return;
+    const aan = b.classList.contains('chosen');
+    $$('.opt', el).forEach(x => { x.classList.remove('chosen'); x.setAttribute('aria-checked', 'false'); });
+    if (!aan) { b.classList.add('chosen'); b.setAttribute('aria-checked', 'true'); }
+    if (cb) cb(aan ? null : Number(b.dataset.o));
+  });
+}
+function getOpt(el) { const c = $('.opt.chosen', el); return c ? Number(c.dataset.o) : null; }
+function setOpt(el, k) { $$('.opt', el).forEach((b, i) => { const on = i === k; b.classList.toggle('chosen', on); b.setAttribute('aria-checked', String(on)); }); }
+function markOpts(el, juist, keuze) { $$('.opt', el).forEach((b, i) => { b.disabled = true; b.classList.remove('chosen'); if (i === juist) b.classList.add('good'); else if (i === keuze) b.classList.add('wrong'); }); }
+/* de vier heuristieken als aankruisvakjes (zoals in Level) */
+function heurKeuze(id) {
+  return '<div class="hkeuze" id="' + id + '">' + HEURS().map(h => '<label class="hk"><input type="checkbox" value="' + h.key + '"><span class="hic">' + ico(h.key) + '</span><span>' + esc(h.naam) + '</span></label>').join('') + '</div>';
+}
+function bindHeur(el, cb) { $$('input', el).forEach(i => i.onchange = () => { i.closest('.hk').classList.toggle('aan', i.checked); if (cb) cb(getHeur(el)); }); }
+function getHeur(el) { return $$('input:checked', el).map(x => x.value); }
+function setHeur(el, l) { $$('input', el).forEach(i => { i.checked = (l || []).indexOf(i.value) >= 0; i.closest('.hk').classList.toggle('aan', i.checked); }); }
+function markHeur(el, f) {
+  $$('label.hk', el).forEach(l => {
+    const i = $('input', l), k = i.value; i.disabled = true; l.classList.add('dis');
+    if (f.heur.indexOf(k) >= 0) l.classList.add('good'); else if (f.gekozen.indexOf(k) >= 0) l.classList.add('wrong');
+    if (k === f.hoofd) l.insertAdjacentHTML('beforeend', '<span class="best">beste keuze</span>');
+  });
+}
+function filterTekst(f) {
+  const ook = f.heur.filter(k => k !== f.hoofd).map(k => HOF(k).naam.toLowerCase());
+  return 'De beste heuristiek hier: <b>' + esc(HOF(f.hoofd).naam) + '</b>.' + (ook.length ? ' Ook ' + esc(ook.join(' en ')) + ' kan helpen.' : '') + '<p class="ux"><b>Signaal:</b> ' + esc(f.signaal) + '</p>';
+}
+function stappenHtml(st) {
+  return '<div class="uitw">' + S.init.info.stappen.map(s => '<div class="stap"><span class="snr">' + s.nr + '</span><div><b>' + esc(s.naam) + '</b><p>' + rich(st[s.key]) + '</p></div></div>').join('') + '</div>';
+}
+
+/* ================= overzicht ================= */
+function viewHome() {
+  const I = S.init, R = I.regels, vg = I.voortgang;
+  const kaarten = route().map(r => {
+    const k = r[0], open = I.open[k], v = vg[k] || {};
+    const tel = k === 'reeks' ? (v.gemaakt ? v.gemaakt + (v.gemaakt === 1 ? ' reeks' : ' reeksen') + ' gemaakt · beste score ' + nl(v.beste) + '%' : 'Nog geen reeks gemaakt.')
+      : (v.pogingen ? v.juist + ' van ' + v.pogingen + ' juist' : 'Nog niet geoefend.');
+    const doel = k !== 'reeks' && R.stapsgewijs ? '<div class="bar" title="' + Math.min(v.juist || 0, R.aantal) + ' van ' + R.aantal + '"><i style="width:' + Math.min(100, (v.juist || 0) / R.aantal * 100) + '%"></i></div>' : '';
+    return '<div class="rcard' + (open ? '' : ' dicht') + '"><span class="rnr">Onderdeel ' + r[1] + '</span><h3><span class="hic">' + ico(open ? k : 'lock') + '</span>' + esc(r[2]) + '</h3><p>' + esc(r[3]) + '</p>' + doel + '<p>' + esc(tel) + '</p>' +
+      '<div class="row"><button class="btn' + (open ? '' : ' ghost') + ' small" data-ga="' + k + '">' + (open ? (v.pogingen || v.gemaakt ? 'Verder oefenen' : 'Start') : 'Op slot') + '</button></div></div>';
+  }).join('');
+  $('#app').innerHTML = secHead('home', '', 'Problemen oplossen met heuristieken', 'Een opstap naar wiskundewedstrijden en de Vlaamse toetsen.') +
+    '<div class="card"><h3>Zo werk je</h3><p style="margin:.2rem 0 .4rem">Een <b>heuristiek</b> is een slimme zoekstrategie: een manier om aan een probleem te beginnen als je niet meteen weet hoe het moet. Je leert vier heuristieken, één voor één. Daarna train je om bij elk probleem de juiste heuristiek te kiezen, zoals bij de Kangoeroe-wedstrijd.</p>' +
+    (R.stapsgewijs ? '<p class="muted" style="margin:0">Elk onderdeel gaat open als je <b>' + R.aantal + ' oefeningen juist</b> hebt in het onderdeel ervoor.</p>' : '') + '</div>' +
+    (I.test.voorMij && !I.test.gedaan ? '<div class="warn">De test staat open voor jouw klas. <button class="linkbtn" data-ga="test">Naar de test</button></div>' : '') +
+    '<div class="route">' + kaarten + '</div>';
+  $$('[data-ga]').forEach(b => b.onclick = () => go(b.dataset.ga));
+}
+
+/* ================= 0. vier stappen + begrijpen ================= */
+function viewStappen() {
+  const I = S.init;
+  $('#app').innerHTML = '<div class="qwrap">' + secHead('stappen', '0', 'Probleemoplossen in 4 stappen', 'Elk probleem los je op in dezelfde vier stappen.') +
+    '<div class="card"><h3>De vier stappen</h3><div class="flow">' + I.info.stappen.map(s => '<div class="stap"><span class="snr">' + s.nr + '</span><div><b>' + esc(s.naam) + '</b><p>' + esc(s.tekst) + '</p></div></div>').join('') + '</div></div>' +
+    '<div class="card"><h3>Bij stap 2 kies je een heuristiek</h3><div class="hkeuze">' + HEURS().map(h => '<div class="hk dis"><span class="hic">' + ico(h.key) + '</span><span><b>' + h.nr + '. ' + esc(h.naam) + '</b><br><span class="muted">' + esc(h.wat.split('. ')[0].replace(/\.$/, '')) + '.</span></span></div>').join('') + '</div></div>' +
+    '<div class="card"><h3>Oefen stap 1: begrijpen</h3><p class="muted" style="margin:.1rem 0 .7rem">Niet alles in een opgave heb je nodig. Duid bij elke zin aan of je hem <b>nodig</b> hebt, of hij <b>niet nodig</b> is, of dat het de <b>vraag</b> is.</p><div id="bz"></div></div></div>';
+  S.sub.bi = S.sub.bi || 0;
+  renderBegrijp();
+}
+function renderBegrijp() {
+  const lijst = S.init.begrijp, b = lijst[S.sub.bi % lijst.length], R = S.init.regels, v = S.init.voortgang.stappen;
+  $('#bz').innerHTML = '<div class="oefkop"><b>Opgave ' + (S.sub.bi % lijst.length + 1) + ' van ' + lijst.length + '</b><span class="pill">basis</span><span class="spacer"></span><span class="muted">' + v.juist + ' juist' + (R.stapsgewijs && v.juist < R.aantal ? ' · nog ' + (R.aantal - v.juist) + ' voor onderdeel 1' : '') + '</span></div>' +
+    b.stukken.map((t, i) => '<div class="bstuk" data-i="' + i + '"><p>' + esc(t) + '</p><span class="seg">' + [['n', 'nodig'], ['x', 'niet nodig'], ['v', 'vraag']].map(o => '<button type="button" class="chip" data-w="' + o[0] + '" aria-pressed="false">' + o[1] + '</button>').join('') + '</span></div>').join('') +
+    '<div id="bfb"></div><div class="row"><button class="btn" id="bok">Controleer</button><button class="btn ghost" id="bnext">Volgende opgave →</button></div>';
+  $$('.bstuk').forEach(r => $$('.chip', r).forEach(c => c.onclick = () => {
+    if (r.classList.contains('klaar')) return;
+    if (c.dataset.w === 'v') $$('.chip[data-w="v"]').forEach(x => { if (x !== c && x.getAttribute('aria-pressed') === 'true') x.setAttribute('aria-pressed', 'false'); });
+    $$('.chip', r).forEach(x => x.setAttribute('aria-pressed', String(x === c)));
+  }));
+  $('#bnext').onclick = () => { S.sub.bi++; renderBegrijp(); };
+  $('#bok').onclick = async () => {
+    const keuze = $$('.bstuk').map(r => { const c = $('.chip[aria-pressed="true"]', r); return c ? c.dataset.w : ''; });
+    if (keuze.some(x => !x)) return toast('Duid bij elke zin iets aan.');
+    if (keuze.filter(x => x === 'v').length !== 1) return toast('Duid precies één zin aan als vraag.');
+    $('#bok').disabled = true;
+    try {
+      const g = await api('apiCheckBegrijp', b.id, keuze.map((x, i) => x === 'n' ? i : -1).filter(i => i >= 0), keuze.indexOf('v'));
+      $$('.bstuk').forEach((r, i) => {
+        r.classList.add('klaar');
+        const moet = i === g.vraag ? 'v' : g.nodig.indexOf(i) >= 0 ? 'n' : 'x', goed = keuze[i] === moet;
+        r.classList.add(goed ? 'good' : 'wrong');
+        if (!goed) r.insertAdjacentHTML('beforeend', '<span class="jl">Dit is ' + (moet === 'v' ? 'de vraag' : moet === 'n' ? 'nodig' : 'niet nodig') + '.</span>');
+      });
+      $('#bfb').innerHTML = '<div class="feedback ' + (g.ok ? 'ok' : 'bad') + '"><b>' + (g.ok ? 'Goed zo! Je weet wat gegeven en gevraagd is.' : 'Nog niet helemaal. Bekijk de zinnen in het rood.') + '</b></div>';
+      nieuweVoortgang(g);
+      $('#bnext').className = 'btn';
+    } catch (e) { showErr(e, $('#bz')); $('#bok').disabled = false; }
+  };
+}
+
+/* ================= 1–4. één heuristiek ================= */
+function viewHeur(k) {
+  const h = HOF(k), tab = S.sub[k] || 'uitleg';
+  const tabs = [['uitleg', 'Uitleg en voorbeeld'], ['begeleid', 'Begeleid oefenen'], ['basis', 'Basis en oefenen'], ['verdieping', 'Verdieping']];
+  const v = S.init.voortgang[k], R = S.init.regels;
+  $('#app').innerHTML = '<div class="qwrap">' + secHead(k, String(h.nr), h.naam, esc(h.wat)) +
+    '<div class="subtabs" role="tablist">' + tabs.map(t => '<button class="tab" role="tab" data-ht="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + t[1] + '</button>').join('') + '</div>' +
+    '<p class="muted" style="margin:-.4rem 0 .8rem;font-size:.92rem">' + (v.pogingen ? v.juist + ' van ' + v.pogingen + ' oefeningen juist' : 'Nog niet geoefend') + (R.stapsgewijs && v.juist < R.aantal && k !== 'patroon' ? ' · nog ' + (R.aantal - v.juist) + ' juist om het volgende onderdeel te openen' : R.stapsgewijs && v.juist < R.aantal ? ' · nog ' + (R.aantal - v.juist) + ' juist om de filtertraining te openen' : '') + '</p>' +
+    '<div id="hz"></div></div>';
+  $$('[data-ht]').forEach(b => b.onclick = () => { S.sub[k] = b.dataset.ht; viewHeur(k); });
+  if (tab === 'uitleg') viewUitleg(k);
+  else if (tab === 'begeleid') { $('#hz').innerHTML = '<div class="tip" style="background:var(--or-soft);border-color:var(--orange)">Bij begeleid oefenen kies je eerst welke heuristiek(en) je gebruikt. Daarna krijg je een tip. Na het verbeteren zie je de oplossing in 4 stappen.</div><div id="oz"></div>'; startOefen('begeleid', k, ''); }
+  else if (tab === 'basis') { $('#hz').innerHTML = '<div id="oz"></div>'; startOefen('zelfstandig', k, 'basis'); }
+  else { $('#hz').innerHTML = '<div class="tip" style="background:var(--or-soft);border-color:var(--orange)">Verdieping is moeilijker. Probeer deze oefeningen als je <b>Basis en oefenen</b> goed kan.</div><div id="oz"></div>'; startOefen('zelfstandig', k, 'verdieping'); }
+}
+function viewUitleg(k) {
+  const h = HOF(k);
+  $('#hz').innerHTML = '<div class="grid2"><div class="card"><h3>Wanneer gebruik je deze heuristiek?</h3><ul class="ws">' + h.wanneer.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' +
+    '<div class="card"><h3>Signaalwoorden</h3><p class="muted" style="margin:.1rem 0 .3rem">Zie je deze woorden in een opgave? Denk dan aan ' + esc(h.naam.toLowerCase()) + '.</p><div class="sig">' + h.signalen.map(s => '<span>' + esc(s) + '</span>').join('') + '</div></div></div>' +
+    '<div class="card"><h3>Uitgewerkt voorbeeld</h3><div id="vb"><div class="spinner"></div></div></div>';
+  laadVoorbeeld(k);
+}
+async function laadVoorbeeld(k) {
+  try {
+    const q = await api('apiVoorbeeld', k, S.sub['vb_' + k] || null);
+    if (!$('#vb')) return;
+    S.sub['vb_' + k] = q.id;
+    let n = 0;
+    $('#vb').innerHTML = '<div class="oefkop">' + lvl(q.punten) + '</div>' + qHtml(q) + optsHtml(q, true) + '<div id="vbst"></div><div class="row"><button class="btn" id="vbn">Toon stap 1: begrijpen</button><button class="btn ghost" id="vba">Ander voorbeeld</button></div>';
+    const stappen = S.init.info.stappen;
+    $('#vbn').onclick = () => {
+      if (n >= 4) return;
+      const s = stappen[n];
+      $('#vbst').insertAdjacentHTML('beforeend', '<div class="stap" style="margin-bottom:.5rem"><span class="snr">' + s.nr + '</span><div><b>' + esc(s.naam) + '</b><p>' + rich(q.stappen[s.key]) + '</p></div></div>');
+      n++;
+      if (n === 3) markOpts($('#vb'), q.ans, null);
+      if (n < 4) $('#vbn').textContent = 'Toon stap ' + (n + 1) + ': ' + stappen[n].naam.toLowerCase();
+      else { $('#vbn').remove(); $('#vbst').insertAdjacentHTML('beforeend', '<div class="feedback ok"><b>Het antwoord is ' + q.juistLetter + '.</b></div>'); }
+    };
+    $('#vba').onclick = () => { $('#vb').innerHTML = '<div class="spinner"></div>'; laadVoorbeeld(k); };
+  } catch (e) { if ($('#vb')) { $('#vb').innerHTML = ''; showErr(e, $('#vb')); } }
+}
+
+/* ================= oefenen (begeleid, zelfstandig, filter) ================= */
+async function startOefen(modus, heur, deel) {
+  const vorige = S.oef && S.oef.items ? S.oef.items[S.oef.items.length - 1].q.id : null;
+  S.oef = { modus, heur, deel, i: 0, goed: 0, items: null };
+  $('#oz').innerHTML = '<div class="spinner"></div>';
+  const mijn = S.oef;
+  try { const items = await api('apiNewPractice', modus, heur, deel, 5, vorige); if (S.oef !== mijn || !$('#oz')) return; mijn.items = items; renderOef(); }
+  catch (e) { if ($('#oz')) { $('#oz').innerHTML = ''; showErr(e, $('#oz')); } }
+}
+function renderOef() {
+  const O = S.oef, it = O.items[O.i], q = it.q, M = O.modus;
+  let h = '<div class="card"><div class="oefkop"><b>Vraag ' + (O.i + 1) + ' van ' + O.items.length + '</b>' + lvl(q.punten) + '<span class="spacer"></span><span class="score">' + O.goed + ' juist</span></div>' + qHtml(q);
+  if (M === 'begeleid') {
+    h += '<p class="stapkop">Stap 2 · Plannen: welke heuristiek(en) kunnen je helpen?</p>' + heurKeuze('hk') +
+      '<button class="btn ghost small" id="tipb" disabled>Toon de tip</button><div class="tipbox" id="tip" hidden><b>Tip:</b> ' + rich(q.tip) + '</div>' +
+      '<p class="stapkop">Stap 3 · Uitvoeren: kies je antwoord</p>' + optsHtml(q);
+  } else if (M === 'filter') {
+    h += optsHtml(q, true) + '<p class="stapkop">Welke heuristiek(en) helpen bij dit probleem? Je hoeft het niet op te lossen.</p>' + heurKeuze('hk');
+  } else h += optsHtml(q);
+  h += '<div id="fb"></div><div class="row"><button class="btn" id="chk">Controleer</button></div></div>';
+  $('#oz').innerHTML = h;
+  const card = $('#oz .card');
+  if (M !== 'filter') bindOpts(card);
+  if ($('#hk')) bindHeur($('#hk'), l => { if ($('#tipb')) $('#tipb').disabled = !l.length; });
+  if ($('#tipb')) $('#tipb').onclick = () => { $('#tip').hidden = false; $('#tipb').remove(); };
+  $('#chk').onclick = () => controleer(card);
+}
+async function controleer(card) {
+  const O = S.oef, it = O.items[O.i], M = O.modus;
+  const keuze = M === 'filter' ? null : getOpt(card), gekozen = $('#hk') ? getHeur($('#hk')) : [];
+  if (M !== 'zelfstandig' && !gekozen.length) return toast('Duid eerst minstens één heuristiek aan.');
+  if (M !== 'filter' && keuze === null) return toast('Kies eerst een antwoord.');
+  $('#chk').disabled = true;
+  try {
+    const g = await api('apiCheckPractice', it.key, M, keuze, gekozen);
+    if (g.telt) O.goed++;
+    if (M !== 'filter') markOpts(card, g.juist, keuze);
+    if (g.filter) markHeur($('#hk'), g.filter);
+    let fb = '';
+    if (g.filter) fb += '<div class="feedback ' + (g.filter.ok ? 'ok' : 'bad') + '"><b>' + (g.filter.ok ? 'Goed gekozen!' : 'Niet de beste keuze.') + '</b> <span class="ux" style="display:inline">' + filterTekst(g.filter) + '</span></div>';
+    if (M !== 'filter') fb += '<div class="feedback ' + (g.ok ? 'ok' : 'bad') + '"><b>' + (g.ok ? 'Juist! Het antwoord is ' + g.juistLetter + '.' : 'Niet juist. Het juiste antwoord is ' + g.juistLetter + '.') + '</b></div>';
+    fb += M === 'begeleid' ? '<p class="stapkop">Stap 4 · Terugkijken: de oplossing in 4 stappen</p>' + stappenHtml(g.stappen)
+      : '<details class="uit"' + (M === 'zelfstandig' && !g.ok ? ' open' : '') + '><summary>Bekijk de oplossing in 4 stappen</summary>' + stappenHtml(g.stappen) + '</details>';
+    $('#fb').innerHTML = fb;
+    nieuweVoortgang(g);
+    const laatste = O.i === O.items.length - 1;
+    $('#chk').outerHTML = laatste ? '<button class="btn" id="nxt">Bekijk je score</button>' : '<button class="btn" id="nxt">Volgende vraag →</button>';
+    $('#nxt').onclick = () => { if (laatste) eindeOef(); else { O.i++; renderOef(); $('#oz').scrollIntoView({ block: 'start' }); } };
+  } catch (e) { $('#chk').disabled = false; showErr(e, $('#fb')); }
+}
+function eindeOef() {
+  const O = S.oef;
+  $('#oz').innerHTML = '<div class="card"><h3>Reeks klaar</h3><p style="font-size:1.15rem;margin:.2rem 0 .8rem">Je had <b>' + O.goed + ' van ' + O.items.length + '</b> juist.' + (O.goed === O.items.length ? ' Knap gedaan!' : '') + '</p><div class="row"><button class="btn" id="nog">Nog 5 vragen</button><button class="btn ghost" id="ovz">Naar het overzicht</button></div></div>';
+  $('#nog').onclick = () => startOefen(O.modus, O.heur, O.deel);
+  $('#ovz').onclick = () => go('home');
+}
+
+/* ================= 5. filtertraining ================= */
+function viewFilter() {
+  $('#app').innerHTML = '<div class="qwrap">' + secHead('filter', '5', 'Filtertraining', 'Lees het probleem en kies welke heuristiek(en) je zou gebruiken. Je hoeft het niet op te lossen.') +
+    '<div class="card"><h3>Zo filter je</h3><p style="margin:.1rem 0 .4rem">Bij de Kangoeroe heb je weinig tijd per vraag. Het helpt als je snel ziet <b>hoe</b> je aan een probleem begint. Let op de signalen:</p><div class="hkeuze">' +
+    HEURS().map(h => '<div class="hk dis"><span class="hic">' + ico(h.key) + '</span><span><b>' + esc(h.kort) + '</b><br><span class="muted">' + esc(h.signalen.slice(0, 3).join(' · ')) + '</span></span></div>').join('') + '</div><p class="muted" style="margin:.2rem 0 0;font-size:.92rem">Soms helpen twee heuristieken. Kies dan de beste en eventueel een tweede die ook past.</p></div>' +
+    '<div id="oz"></div></div>';
+  startOefen('filter', '', '');
+}
+
+/* ================= 6. Kangoeroe-reeksen + test ================= */
+function viewReeksHome() {
+  const I = S.init, R = I.regels, v = I.voortgang.reeks;
+  $('#app').innerHTML = '<div class="qwrap">' + secHead('reeks', '6', 'Kangoeroe-reeksen', 'Gemengde problemen, zoals bij een echte wiskundewedstrijd.') +
+    '<div class="card"><h3>Een reeks van 12 vragen</h3><ul class="ws" style="margin-bottom:.9rem"><li>4 vragen van <b>3 punten</b>, 4 van <b>4 punten</b> en 4 van <b>5 punten</b>.</li><li>Bij elke vraag zijn er vijf antwoorden (A tot E). Er is altijd precies één juist antwoord.</li>' +
+    (R.reeksTijd ? '<li>Je hebt <b>' + R.reeksTijd + ' minuten</b>. Daarna wordt je reeks automatisch ingediend.</li>' : '') +
+    (R.aftrek ? '<li>Een fout antwoord kost <b>een kwart</b> van de punten van die vraag. Niets invullen kost niets. Gok dus niet zomaar.</li>' : '<li>Een fout antwoord kost geen punten.</li>') +
+    '<li>Je mag bij elke vraag aanduiden welke heuristiek je gebruikt. Dat telt niet mee voor je punten, maar je ziet achteraf of je goed gekozen hebt.</li><li>Neem kladpapier: tekenen en uitproberen mag!</li></ul>' +
+    '<button class="btn" id="rStart">Start een reeks</button></div>' +
+    (v.gemaakt ? '<div class="card"><h3>Jouw reeksen</h3><p style="margin:.2rem 0 0">' + v.gemaakt + (v.gemaakt === 1 ? ' reeks' : ' reeksen') + ' gemaakt · beste score <b>' + nl(v.beste) + '%</b> · laatste score <b>' + nl(v.laatste) + '%</b></p></div>' : '') + '</div>';
+  $('#rStart').onclick = () => startRun('reeks');
+}
+function viewTestHome() {
+  const T = S.init.test, I = S.init;
+  let h = '<div class="qwrap">' + secHead('test', '', 'Test heuristieken', esc(T.ronde));
+  if (T.gedaan) {
+    h += '<div class="card"><h3>Je hebt de test gemaakt</h3>' + (T.resultaat ? resultaatHtml(T.resultaat, true) : '<p>Je leerkracht bespreekt het resultaat met jou.</p>') + '</div>';
+  } else if (!T.open) {
+    h += '<div class="info-box"><b>De test staat op dit moment niet open.</b><p style="margin:.3rem 0 0">Je leerkracht zet de test open wanneer het zover is. Oefen ondertussen gerust verder!</p></div>';
+  } else if (!T.voorMij) {
+    h += '<div class="info-box"><b>De test staat nu niet open voor jouw klas.</b></div>';
+  } else {
+    h += '<div class="card"><h3>' + (T.bezig ? 'Ga verder met je test' : 'Klaar om te starten?') + '</h3><ul class="ws" style="margin-bottom:1rem">' +
+      '<li>De test heeft <b>' + T.aantalVragen + ' vragen</b> zoals bij de Kangoeroe: vragen van 3, 4 en 5 punten met vijf antwoorden.</li>' +
+      (T.tijd ? '<li>Je hebt <b>' + T.tijd + ' minuten</b>. Daarna wordt je test automatisch ingediend.</li>' : '<li>Er is geen tijdslimiet.</li>') +
+      (T.aftrek ? '<li>Een fout antwoord kost een kwart van de punten van die vraag. Niets invullen kost niets.</li>' : '') +
+      (T.filter ? '<li>Duid bij elke vraag ook aan welke heuristiek(en) je gebruikt.</li>' : '') +
+      '<li>Je antwoorden worden automatisch bewaard. Je kan terugkeren naar vorige vragen.</li>' +
+      '<li><b>Blijf in dit venster.</b> Als je een ander tabblad of programma opent, wordt dat geregistreerd.</li><li>Je kan de test maar <b>één keer</b> indienen.</li></ul>' +
+      (T.codeNodig && !T.bezig ? '<div class="part"><span>Toegangscode van je leerkracht:</span><input class="inp" id="tcode" autocomplete="off"></div>' : '') +
+      '<button class="btn" id="tStart">' + (T.bezig ? 'Verder gaan' : 'Start de test') + '</button></div>';
+  }
+  if (I.admin) h += '<div class="card"><h3>Proefmodus voor beheerders</h3><p class="muted" style="margin:.2rem 0 .7rem">Probeer de test zoals een leerling hem ziet. Je resultaat wordt niet geregistreerd. Na het indienen zie je per vraag de oplossing.</p><div class="row"><button class="btn ghost" data-proef="A">Proeftest A-stroom</button><button class="btn ghost" data-proef="B">Proeftest B-stroom</button></div></div>';
+  h += '</div>';
+  $('#app').innerHTML = h;
+  if ($('#tStart')) $('#tStart').onclick = () => startRun('test', false);
+  $$('[data-proef]').forEach(b => b.onclick = () => startRun('test', b.dataset.proef));
+}
+function resultaatHtml(r, isTest) {
+  const per = r.per.filter(p => p.pct !== '' && p.pct !== null && !isNaN(Number(p.pct)));
+  let h = '<div class="resgrid"><div class="resbox"><span class="pill or">punten</span><div class="big">' + nl(r.punten) + ' / ' + r.max + '</div><span class="muted">' + nl(r.pct !== undefined ? r.pct : r.totaal) + '%</span></div>' +
+    (r.juist !== undefined ? '<div class="resbox"><span class="pill">antwoorden</span><div class="big">' + r.juist + ' juist</div><span class="muted">' + r.fout + ' fout · ' + r.leeg + ' leeg</span></div>' : '') +
+    (r.filter !== '' && r.filter !== undefined && !isNaN(Number(r.filter)) ? '<div class="resbox"><span class="pill">heuristiek gekozen</span><div class="big">' + nl(Number(r.filter)) + '%</div><span class="muted">goed gefilterd</span></div>' : '') + '</div>';
+  if (per.length) h += '<p class="stapkop" style="margin-top:1rem">Punten per heuristiek</p>' + per.map(p => '<div class="hbar"><span>' + esc(HOF(p.key).kort) + '</span><div class="bar"><i style="width:' + Number(p.pct) + '%"></i></div><b>' + nl(Number(p.pct)) + '%</b></div>').join('');
+  if (isTest && r.cesuur !== undefined && r.geslaagd !== undefined) h += '<p style="margin:1rem 0 0;font-size:1.1rem">Resultaat: <span class="' + (r.geslaagd ? 'yes' : 'no') + '">' + (r.geslaagd ? 'geslaagd 🎉' : 'nog niet geslaagd') + '</span> <span class="muted" style="font-size:.9rem">(geslaagd vanaf ' + r.cesuur + '%)</span></p>';
+  return h;
+}
+async function startRun(kind, proef) {
+  const code = $('#tcode') ? $('#tcode').value : '';
+  $('#app').innerHTML = '<div class="spinner"></div>';
+  try {
+    const d = kind === 'reeks' ? await api('apiStartReeks') : await api('apiStartTest', code, proef || false);
+    if (d.verlopen) { S.init.test.gedaan = true; S.init.test.bezig = false; S.init.test.resultaat = d.resultaat && d.resultaat.per ? d.resultaat : null; toast('De tijd was verstreken. Je test werd ingediend.'); return viewTestHome(); }
+    const filter = kind === 'reeks' ? true : d.filter;
+    S.run = { kind, d, proef: !!proef, filter, i: 0, ans: d.vragen.map((q, k) => (d.antwoorden && d.antwoorden[k]) || { k: null, h: [] }), verlaten: d.verlaten || 0, offset: d.nu - Date.now(), loopt: true, dirty: false };
+    document.body.classList.add('testmodus');
+    try { if (kind === 'test' && !proef && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen(); } catch (e) { }
+    renderRun();
+    S.run.timerId = setInterval(tick, 1000); tick();
+    if (kind === 'test') S.run.saveId = setInterval(() => saveTest(false), 15000);
+  } catch (e) { if (kind === 'reeks') viewReeksHome(); else viewTestHome(); showErr(e); }
+}
+const beantwoord = a => !!a && a.k !== null && a.k !== undefined && a.k !== '';
+function renderRun() {
+  const T = S.run, d = T.d, q = d.vragen[T.i];
+  let nav = '', prev = 0;
+  d.vragen.forEach((v, k) => { if (v.punten !== prev) { nav += '<span class="ptsep">' + v.punten + ' ptn</span>'; prev = v.punten; } nav += '<button class="navq' + (k === T.i ? ' cur' : '') + (beantwoord(T.ans[k]) ? ' done' : '') + '" data-k="' + k + '" aria-label="Vraag ' + (k + 1) + '">' + (k + 1) + '</button>'; });
+  const titel = T.kind === 'reeks' ? 'Kangoeroe-reeks' : T.proef ? 'Proeftest ' + T.proef + '-stroom' : 'Test heuristieken';
+  $('#app').innerHTML = '<div class="testbar"><div class="row"><b style="font-family:var(--f-display)">' + titel + '</b><span class="muted" id="telb">' + T.ans.filter(beantwoord).length + ' / ' + d.vragen.length + ' beantwoord</span><span class="spacer"></span><button type="button" class="tts-inline" aria-pressed="' + (window.TTS && TTS.on() ? 'true' : 'false') + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span class="t">Voorlezen: ' + (window.TTS && TTS.on() ? 'aan' : 'uit') + '</span></button><span class="timer" id="timer"></span></div><div class="navqs" style="margin-top:.5rem">' + nav + '</div></div>' +
+    (T.verlaten ? '<div class="warn" id="vlw">Je hebt het testvenster ' + T.verlaten + ' keer verlaten. Dit wordt doorgegeven aan je leerkracht.</div>' : '') +
+    '<div class="qwrap"><div class="card" id="rq"><div class="qmeta"><b>Vraag ' + (T.i + 1) + '</b><span class="pill or">' + q.punten + ' punten</span></div>' + qHtml(q) + optsHtml(q) +
+    (T.filter ? '<p class="stapkop">Welke heuristiek(en) gebruik je?' + (T.kind === 'reeks' ? ' <span class="muted" style="font-weight:400">(niet verplicht, telt niet mee voor je punten)</span>' : ' <span class="muted" style="font-weight:400">(telt niet mee voor je punten)</span>') + '</p>' + heurKeuze('rh') : '') +
+    '<div class="row" style="margin-top:.6rem"><button class="btn ghost" id="prev"' + (T.i === 0 ? ' disabled' : '') + '>← Vorige</button>' + (T.i < d.vragen.length - 1 ? '<button class="btn" id="next">Volgende →</button>' : '<button class="btn" id="naarIndienen">Naar indienen →</button>') + '<span class="spacer"></span><button class="btn ghost" id="indienen">Overzicht en indienen</button></div></div></div>';
+  const card = $('#rq'), a = T.ans[T.i];
+  setOpt(card, beantwoord(a) ? Number(a.k) : -1);
+  bindOpts(card, k => { T.ans[T.i] = Object.assign({}, T.ans[T.i], { k }); T.dirty = true; const nb = $('.navq.cur'); if (nb) nb.classList.toggle('done', k !== null); $('#telb').textContent = T.ans.filter(beantwoord).length + ' / ' + d.vragen.length + ' beantwoord'; });
+  if ($('#rh')) { setHeur($('#rh'), a.h); bindHeur($('#rh'), l => { T.ans[T.i] = Object.assign({}, T.ans[T.i], { h: l }); T.dirty = true; }); }
+  $$('.navq').forEach(b => b.onclick = () => gaNaar(Number(b.dataset.k)));
+  $('#prev').onclick = () => gaNaar(T.i - 1);
+  if ($('#next')) $('#next').onclick = () => gaNaar(T.i + 1);
+  if ($('#naarIndienen')) $('#naarIndienen').onclick = overzicht;
+  $('#indienen').onclick = overzicht;
+  tick();
+}
+function gaNaar(k) { const T = S.run; T.i = Math.max(0, Math.min(T.d.vragen.length - 1, k)); saveTest(false); renderRun(); window.scrollTo(0, 0); }
+function tick() {
+  const T = S.run; if (!T || !T.loopt) return;
+  const el = $('#timer'); if (!el) return;
+  if (!T.d.einde) { el.textContent = ''; return; }
+  const left = Math.max(0, Math.round((T.d.einde - (Date.now() + T.offset)) / 1000));
+  el.textContent = '⏱ ' + Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0');
+  el.classList.toggle('laag', left < 300);
+  if (left <= 0 && !T.bezigMetIndienen) { toast('De tijd is om. Je antwoorden worden ingediend.'); dienIn(); }
+}
+async function saveTest(force) {
+  const T = S.run; if (!T || !T.loopt || T.proef || T.kind !== 'test') return;
+  if (!T.dirty && !force) return;
+  T.dirty = false;
+  try { await api('apiSaveTest', T.ans, T.verlaten); } catch (e) { T.dirty = true; }
+}
+function vensterVerlaten() {
+  const T = S.run; if (!T || !T.loopt || T.bezigMetIndienen || T.kind !== 'test') return;
+  const nu = Date.now(); if (T.laatsteVerlaten && nu - T.laatsteVerlaten < 1500) return;
+  T.laatsteVerlaten = nu; T.verlaten++; T.dirty = true; saveTest(true);
+  let w = $('#vlw');
+  if (!w) { w = document.createElement('div'); w.className = 'warn'; w.id = 'vlw'; const tb = $('.testbar'); if (tb) tb.after(w); }
+  w.textContent = 'Je hebt het testvenster ' + T.verlaten + ' keer verlaten. Dit wordt doorgegeven aan je leerkracht.';
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) vensterVerlaten(); });
+window.addEventListener('blur', () => setTimeout(() => { if (!document.hasFocus()) vensterVerlaten(); }, 300));
+window.addEventListener('beforeunload', e => { if (S.run && S.run.loopt && (S.run.kind === 'reeks' || !S.run.proef)) { saveTest(true); e.preventDefault(); e.returnValue = ''; } });
+
+function overzicht() {
+  const T = S.run;
+  const open = T.ans.map((a, k) => beantwoord(a) ? null : k + 1).filter(x => x);
+  const wat = T.kind === 'reeks' ? 'reeks' : 'test';
+  const dlg = document.createElement('dialog');
+  dlg.innerHTML = '<div class="dlg"><h3 style="margin-top:0">' + (wat === 'reeks' ? 'Reeks' : 'Test') + ' indienen?</h3>' + (open.length ? '<p class="warn">Je hebt nog <b>' + open.length + '</b> ' + (open.length === 1 ? 'vraag' : 'vragen') + ' niet beantwoord: ' + open.join(', ') + '.</p>' : '<p>Je hebt alle vragen beantwoord. Goed bezig!</p>') +
+    '<p>Na het indienen kan je niets meer veranderen.</p><div class="row"><button class="btn" id="dOk">Ja, indienen</button><button class="btn ghost" id="dNo">Nee, terug</button></div></div>';
+  document.body.appendChild(dlg); dlg.showModal();
+  $('#dNo', dlg).onclick = () => { dlg.close(); dlg.remove(); };
+  $('#dOk', dlg).onclick = () => { dlg.close(); dlg.remove(); dienIn(); };
+}
+async function dienIn() {
+  const T = S.run; if (T.bezigMetIndienen) return;
+  T.bezigMetIndienen = true; clearInterval(T.timerId); clearInterval(T.saveId);
+  $('#app').innerHTML = '<div class="spinner"></div><p style="text-align:center">Je antwoorden worden ingediend…</p>';
+  let r = null, pogingen = 0;
+  while (pogingen < 4) {
+    try { r = T.kind === 'reeks' ? await api('apiSubmitReeks', T.ans) : await api('apiSubmitTest', T.ans, T.verlaten, T.proef); break; }
+    catch (e) { pogingen++; if (pogingen >= 4 || /verlopen/.test(errMsg(e))) { T.bezigMetIndienen = false; $('#app').innerHTML = '<div class="err">Indienen lukte niet (' + esc(errMsg(e).replace(/^Error:\s*/, '')) + ').</div><button class="btn" id="retry">Opnieuw proberen</button>'; $('#retry').onclick = dienIn; return; } await new Promise(s => setTimeout(s, 2000)); }
+  }
+  T.loopt = false; document.body.classList.remove('testmodus');
+  try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { }
+  if (T.kind === 'test' && !T.proef) { S.init.test.gedaan = true; S.init.test.bezig = false; S.init.test.resultaat = r && r.per ? r : null; S.init.oefenenGeblokkeerd = false; }
+  if (T.kind === 'reeks' && r) S.init.voortgang = r.voortgang;
+  S.run = null;
+  const titel = T.kind === 'reeks' ? 'Je reeks is ingediend' : T.proef ? 'Proeftest ingediend' : 'Je test is ingediend';
+  let h = '<div class="qwrap"><div class="sec-head"><h2>' + titel + '</h2><p>Bedankt en goed gewerkt!</p></div><div class="card"><h3>Resultaat</h3>' + (r && r.per ? resultaatHtml(r, T.kind === 'test') : '<p>Je leerkracht bespreekt het resultaat met jou.</p>') + '</div>';
+  if (r && r.vragen) h += '<div class="card"><h3>Bekijk elke vraag</h3>' + r.vragen.map((v, k) => reviewHtml(T.d.vragen[k], v, T.ans[k])).join('') + '</div>';
+  h += '<div class="row"><button class="btn" id="home">Terug naar het overzicht</button>' + (T.kind === 'reeks' ? '<button class="btn ghost" id="nogReeks">Nog een reeks</button>' : '') + '</div></div>';
+  $('#app').innerHTML = h;
+  $$('.rev').forEach((el, k) => { const v = r.vragen[k]; markOpts(el, v.juist, v.keuze); if ($('.hkeuze', el)) { setHeur($('.hkeuze', el), (T.ans[k] || {}).h); markHeur($('.hkeuze', el), { hoofd: v.hoofd, heur: v.heur, gekozen: (T.ans[k] || {}).h || [] }); } });
+  $('#home').onclick = () => go('home');
+  if ($('#nogReeks')) $('#nogReeks').onclick = () => startRun('reeks');
+  window.scrollTo(0, 0);
+}
+function reviewHtml(q, v, a) {
+  const st = v.ok ? '<span class="yes">✓ juist, +' + nl(v.score) + '</span>' : v.leeg ? '<span class="muted">niet beantwoord, 0</span>' : '<span class="no">✗ fout' + (v.score < 0 ? ', ' + nl(v.score) : ', 0') + '</span>';
+  return '<div class="rev"><div class="qmeta"><b>Vraag ' + v.nr + '</b><span class="pill or">' + v.pt + ' punten</span>' + st + '</div>' + qHtml(q) + optsHtml(q, true) +
+    '<p class="stapkop">Heuristiek: ' + esc(HOF(v.hoofd).naam) + '</p>' + (a && a.h && a.h.length ? heurKeuze('rv' + v.nr) : '') +
+    '<details class="uit"><summary>Bekijk de oplossing in 4 stappen</summary>' + stappenHtml(v.stappen) + '<p class="ux"><b>Signaal:</b> ' + esc(v.signaal) + '</p></details></div>';
+}
+
+/* ================= beheer ================= */
+async function viewBeheer(fresh) {
+  if (!S.admin || fresh !== false) {
+    $('#app').innerHTML = '<div class="spinner"></div>';
+    try { S.admin = huidigeGroep(await api('apiAdminData')); } catch (e) { $('#app').innerHTML = ''; return showErr(e); }
+  }
+  const tabs = [['test', 'Test aan/uit'], ['res', 'Testresultaten'], ['vg', 'Voortgang'], ['ll', 'Leerlingen'], ['inst', 'Instellingen']];
+  $('#app').innerHTML = secHead('beheer', '', 'Beheer', 'Gegevens staan in <a href="' + esc(S.admin.sheetUrl) + '" target="_blank" rel="noopener">de Google Sheet</a> van deze website.') + '<div class="subtabs" role="tablist">' + tabs.map(t => '<button class="tab" role="tab" data-st="' + t[0] + '" aria-selected="' + (S.adminTab === t[0]) + '">' + t[1] + '</button>').join('') + '</div><div id="adm"></div>';
+  $$('[data-st]').forEach(b => b.onclick = () => { S.adminTab = b.dataset.st; viewBeheer(false); });
+  ({ test: admTest, res: admRes, vg: admVg, ll: admLl, inst: admInst })[S.adminTab]();
+}
+/* testresultaten tonen de klas, niveaugroep en stroom van NU (tabblad Leerlingen) */
+function huidigeGroep(A) {
+  const per = {}; A.leerlingen.forEach(l => { per[String(l.email).toLowerCase()] = l; });
+  A.test.forEach(r => { const l = per[String(r['E-mail']).toLowerCase()]; if (l) { r['Klas'] = l.klas; r['Niveaugroep'] = l.ng; r['Stroom'] = l.stroom; r['Voornaam'] = l.voornaam; r['Naam'] = l.naam; } });
+  return A;
+}
+function admSave(fn, args, msg) {
+  return api.apply(null, [fn].concat(args)).then(d => { S.admin = huidigeGroep(d); toast(msg || 'Bewaard'); viewBeheer(false); }).catch(e => showErr(e));
+}
+function admTest() {
+  const A = S.admin, st = A.settings;
+  const voorKlassen = st.test_klassen.length ? st.test_klassen.join(', ') : 'alle klassen';
+  let h = '<div class="card"><h3>Test openzetten</h3><label class="switch"><input type="checkbox" id="swOpen"' + (st.test_open ? ' checked' : '') + '> <span>' + (st.test_open ? 'De test staat OPEN' : 'De test staat DICHT') + '</span></label>' +
+    '<p class="muted" style="margin:.6rem 0 0">Ronde: <b>' + esc(st.test_ronde) + '</b> · voor: <b>' + esc(voorKlassen) + '</b> · code: <b>' + (st.test_code ? esc(st.test_code) : 'geen') + '</b> · ' + st.test_per_niveau * 3 + ' vragen · ' + (st.test_tijd_min ? st.test_tijd_min + ' min' : 'geen tijdslimiet') + ' · geslaagd vanaf ' + st.test_cesuur + '%</p></div>';
+  h += '<div class="card"><h3>Wie de test open krijgt</h3><div class="form"><label>Naam van de testronde<input class="inp" id="s_ronde" value="' + esc(st.test_ronde) + '"><small>Nieuwe ronde = iedereen kan opnieuw één keer de test maken.</small></label>' +
+    '<label>Toegangscode<input class="inp" id="s_code" value="' + esc(st.test_code) + '"><small>Leeg = geen code. Deel de code mee in de klas.</small></label></div>' +
+    '<p style="font-weight:600;font-size:.9rem;margin:.9rem 0 .3rem">Klassen (niets aangevinkt = alle klassen)</p><div class="klaskeuze">' + A.klassen.map(k => '<label><input type="checkbox" class="s_kl" value="' + k + '"' + (st.test_klassen.indexOf(k) >= 0 ? ' checked' : '') + '>' + k + '</label>').join('') + '</div>' +
+    '<div class="row" style="margin-top:.9rem"><button class="btn" id="s_save1">Bewaren</button></div></div>';
+  h += '<div class="card"><h3>Lopende tests</h3>' + (A.bezig.length ? '<div class="dtwrap"><table class="dt"><thead><tr><th class="nos">Leerling</th><th class="nos">Start</th><th class="nos">Laatste activiteit</th><th class="nos num">Beantwoord</th><th class="nos num">Venster verlaten</th><th class="nos"></th></tr></thead><tbody>' +
+    A.bezig.map(b => { const l = A.leerlingen.find(x => String(x.email).toLowerCase() === String(b.email).toLowerCase()) || {}; return '<tr><td>' + esc((l.voornaam || '') + ' ' + (l.naam || b.email)) + ' <span class="pill">' + esc(l.klas || '') + '</span></td><td>' + esc(b.start) + '</td><td>' + esc(b.laatste) + '</td><td class="num">' + b.beantwoord + ' / ' + b.totaal + '</td><td class="num">' + b.verlaten + '</td><td><button class="btn ghost small" data-force="' + esc(b.email) + '">Nu indienen</button></td></tr>'; }).join('') +
+    '</tbody></table></div>' : '<p class="muted">Er is momenteel niemand bezig met de test.</p>') + '</div>';
+  $('#adm').innerHTML = h;
+  $('#swOpen').onchange = e => admSave('apiAdminSetTestOpen', [e.target.checked], e.target.checked ? 'De test staat open' : 'De test is gesloten');
+  $('#s_save1').onclick = () => admSave('apiAdminSaveSettings', [{ test_ronde: $('#s_ronde').value, test_code: $('#s_code').value, test_klassen: $$('.s_kl:checked').map(x => x.value) }]);
+  $$('[data-force]').forEach(b => b.onclick = async () => { if (await askConfirm('De test van deze leerling nu indienen met de bewaarde antwoorden?', 'Nu indienen')) admSave('apiAdminForceSubmit', [b.dataset.force], 'Ingediend'); });
+}
+function admInst() {
+  const A = S.admin, st = A.settings;
+  const cb = (id, on, t) => '<p style="margin:.5rem 0"><label class="row" style="font-weight:600"><input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '> ' + t + '</label></p>';
+  $('#adm').innerHTML = '<div class="card"><h3>Leerroute</h3>' + cb('s_stap', st.stapsgewijs, 'Stap voor stap: een onderdeel gaat pas open als het vorige onderdeel genoeg juiste oefeningen heeft') +
+    '<div class="form"><label>Juiste oefeningen om verder te gaan<input class="inp" type="number" min="1" max="20" id="s_aantal" value="' + st.vrijgeven_aantal + '"><small>Per onderdeel (begrijpen, elke heuristiek, filtertraining)</small></label>' +
+    '<label>Tijd voor een Kangoeroe-reeks (minuten)<input class="inp" type="number" min="0" max="300" id="s_rtijd" value="' + st.reeks_tijd_min + '"><small>12 vragen · 0 = geen klok</small></label></div>' +
+    cb('s_aftrek', st.aftrek_fout, 'Zoals bij de Kangoeroe: een fout antwoord kost een kwart van de punten (reeksen en test)') + '<button class="btn" id="s_save4">Bewaren</button></div>' +
+    '<div class="card"><h3>B-stroom</h3><p class="muted" style="margin:.2rem 0 .5rem">Vink de klassen van de B-stroom aan. Leerlingen van die klassen krijgen eenvoudigere getallen en geen verdiepingsvragen van A-niveau. Je kan de stroom per leerling ook aanpassen bij Leerlingen of in de Sheet.</p><div class="klaskeuze">' + A.klassen.map(k => '<label><input type="checkbox" class="s_kb" value="' + k + '"' + (st.klassen_b.indexOf(k) >= 0 ? ' checked' : '') + '>' + k + '</label>').join('') + '</div>' +
+    cb('s_toep', false, 'Pas dit ook toe op de leerlingen die al geregistreerd zijn (alle leerlingen van deze klassen → B, de andere → A)') + '<button class="btn" id="s_save5">Bewaren</button></div>' +
+    '<div class="card"><h3>Testinstellingen</h3><div class="form">' +
+    '<label>Vragen per puntenniveau<input class="inp" type="number" min="1" max="8" id="s_n" value="' + st.test_per_niveau + '"><small>3, 4 en 5 punten → ' + st.test_per_niveau * 3 + ' vragen in totaal</small></label>' +
+    '<label>Geslaagd vanaf (%)<input class="inp" type="number" min="1" max="100" id="s_ces" value="' + st.test_cesuur + '"><small>% van het maximum aantal punten</small></label>' +
+    '<label>Tijdslimiet (minuten)<input class="inp" type="number" min="0" max="300" id="s_tijd" value="' + st.test_tijd_min + '"><small>0 = geen tijdslimiet</small></label>' +
+    '<label>Logo (https-adres van een PNG)<input class="inp" id="s_logo" value="' + esc(st.logo_url) + '"><small>Leeg = ingebouwd logo</small></label></div>' +
+    cb('s_filter', st.test_filter, 'Leerlingen duiden bij elke testvraag aan welke heuristiek ze gebruiken (telt niet mee voor de punten)') +
+    cb('s_toon', st.test_toon_resultaat, 'Leerling ziet zijn score meteen na het indienen') +
+    cb('s_oef', st.oefenen_tijdens_test, 'Leerlingen mogen oefenen terwijl de test voor hun klas openstaat') +
+    '<button class="btn" id="s_save2">Bewaren</button></div>' +
+    '<div class="card"><h3>Beheerders</h3><p class="muted" style="margin:.2rem 0 .5rem">Eén e-mailadres per regel. Beheerders zien dit tabblad, kunnen de test openzetten en alle resultaten bekijken.</p><textarea class="inp" id="s_beh" rows="5" style="width:100%;max-width:480px">' + esc(A.beheerders.join('\n')) + '</textarea><div class="row" style="margin-top:.6rem"><button class="btn" id="s_save3">Beheerders bewaren</button></div></div>';
+  $('#s_save4').onclick = () => admSave('apiAdminSaveSettings', [{ stapsgewijs: $('#s_stap').checked, vrijgeven_aantal: $('#s_aantal').value, reeks_tijd_min: $('#s_rtijd').value, aftrek_fout: $('#s_aftrek').checked }]);
+  $('#s_save5').onclick = () => admSave('apiAdminSaveSettings', [{ klassen_b: $$('.s_kb:checked').map(x => x.value), stroom_toepassen: $('#s_toep').checked }]);
+  $('#s_save2').onclick = () => admSave('apiAdminSaveSettings', [{ test_per_niveau: $('#s_n').value, test_cesuur: $('#s_ces').value, test_tijd_min: $('#s_tijd').value, logo_url: $('#s_logo').value, test_filter: $('#s_filter').checked, test_toon_resultaat: $('#s_toon').checked, oefenen_tijdens_test: $('#s_oef').checked }]);
+  $('#s_save3').onclick = () => admSave('apiAdminSaveSettings', [{ beheerders: $('#s_beh').value.split(/[\s,;]+/).filter(x => x) }]);
+}
+
+/* filters en sorteerbare tabel */
+const F = { ronde: null, klas: '', ng: '', stroom: '', zoek: '', geslaagd: '' };
+function filterBar(opts) {
+  const A = S.admin;
+  let h = '<div class="filters">';
+  if (opts.ronde) { const rondes = Array.from(new Set(A.test.map(r => String(r['Ronde'])))); if (F.ronde === null) F.ronde = A.settings.test_ronde; if (rondes.indexOf(A.settings.test_ronde) < 0) rondes.unshift(A.settings.test_ronde); h += '<label>Ronde<select class="sel" data-f="ronde">' + rondes.map(r => '<option' + (r === F.ronde ? ' selected' : '') + '>' + esc(r) + '</option>').join('') + '</select></label>'; }
+  h += '<label>Klas<select class="sel" data-f="klas"><option value="">alle klassen</option>' + A.klassen.map(k => '<option' + (k === F.klas ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>';
+  h += '<label>Niveaugroep<select class="sel" data-f="ng"><option value="">alle niveaugroepen</option>' + A.niveaugroepen.map(k => '<option' + (k === F.ng ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>';
+  h += '<label>Stroom<select class="sel" data-f="stroom"><option value="">A en B</option>' + ['A', 'B'].map(k => '<option value="' + k + '"' + (k === F.stroom ? ' selected' : '') + '>' + k + '-stroom</option>').join('') + '</select></label>';
+  if (opts.geslaagd) h += '<label>Resultaat<select class="sel" data-f="geslaagd"><option value="">allemaal</option><option value="ja"' + (F.geslaagd === 'ja' ? ' selected' : '') + '>geslaagd</option><option value="nee"' + (F.geslaagd === 'nee' ? ' selected' : '') + '>niet geslaagd</option></select></label>';
+  h += '<label>Zoek leerling<input class="inp" data-f="zoek" value="' + esc(F.zoek) + '" placeholder="naam of e-mail"></label>';
+  if (opts.groep) h += '<label>Samenvatting per<select class="sel" id="groepPer"><option value="Klas"' + (S.groepPer !== 'Niveaugroep' ? ' selected' : '') + '>klas</option><option value="Niveaugroep"' + (S.groepPer === 'Niveaugroep' ? ' selected' : '') + '>niveaugroep</option></select></label>';
+  h += '<span class="spacer"></span><button class="btn ghost small" id="csv">⬇ Download (CSV)</button><button class="btn ghost small" id="refresh">↻ Vernieuwen</button></div>';
+  return h;
+}
+function bindFilters(redraw) {
+  $$('[data-f]').forEach(x => { x.oninput = () => { F[x.dataset.f] = x.value; redraw(); }; });
+  if ($('#groepPer')) $('#groepPer').onchange = e => { S.groepPer = e.target.value; redraw(); };
+  $('#refresh').onclick = () => viewBeheer(true);
+}
+function matchF(klas, ng, naam, stroom) {
+  return (!F.klas || klas === F.klas) && (!F.ng || ng === F.ng) && (!F.stroom || stroom === F.stroom) && (!F.zoek || naam.toLowerCase().indexOf(F.zoek.toLowerCase()) >= 0);
+}
+const pctOf = v => v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v);
+const pctH = (v, ces) => { const p = pctOf(v); return p === null ? '<span class="muted">–</span>' : '<span class="pct' + (ces !== undefined && p < ces ? ' lo' : '') + '">' + nl(p) + '%</span>'; };
+const jaNee = v => v === 'ja' ? '<span class="yes">✓ ja</span>' : '<span class="no">✗ nee</span>';
+const gem = l => { const x = l.map(pctOf).filter(v => v !== null); return x.length ? nl(x.reduce((a, b) => a + b, 0) / x.length) + '%' : '–'; };
+
+function admRes() {
+  const A = S.admin, ces = A.settings.test_cesuur, HK = A.hkeys, HL = A.hlabel;
+  $('#adm').innerHTML = filterBar({ ronde: true, geslaagd: true, groep: true }) + '<div class="card"><h3>Samenvatting</h3><div class="dtwrap"><table class="dt sumtbl" id="sum"></table></div></div><div class="card"><h3>Resultaten per leerling</h3><p class="muted" style="margin:.2rem 0 .6rem;font-size:.85rem">Klik op een kolomtitel om te sorteren. Klik op een naam voor de antwoorden per vraag. Per heuristiek: % van de punten op de vragen van die heuristiek. Filter: % vragen waarbij de leerling een goede heuristiek koos.</p><div class="dtwrap"><table class="dt" id="tres"></table></div></div>';
+  const state = S.resSort || (S.resSort = { k: 3, dir: 1 });
+  const cols = [
+    { t: 'Klas', v: r => r['Klas'] }, { t: 'Niveaugroep', v: r => r['Niveaugroep'] }, { t: 'Stroom', v: r => r['Stroom'] },
+    { t: 'Familienaam', v: r => r['Naam'] + ' ' + r['Voornaam'], h: r => '<button class="linkbtn" data-det="' + esc(r['E-mail']) + '">' + esc(r['Naam']) + '</button>', csv: r => r['Naam'] },
+    { t: 'Voornaam', v: r => r['Voornaam'] + ' ' + r['Naam'], h: r => esc(r['Voornaam']), csv: r => r['Voornaam'] },
+    { t: 'Punten', num: true, v: r => Number(r['Punten']), h: r => nl(Number(r['Punten'])) + ' / ' + r['Maximum'] },
+    { t: 'Totaal', num: true, v: r => Number(r['Totaal %']), h: r => pctH(r['Totaal %'], ces) },
+    { t: 'Geslaagd', v: r => r['Geslaagd'], h: r => jaNee(r['Geslaagd']) }
+  ].concat(HK.map(k => ({ t: HL[k], num: true, v: r => pctOf(r[HL[k] + ' %']) === null ? -1 : Number(r[HL[k] + ' %']), h: r => pctH(r[HL[k] + ' %']), csv: r => r[HL[k] + ' %'] })),
+    [{ t: 'Filter', num: true, v: r => pctOf(r['Filter %']) === null ? -1 : Number(r['Filter %']), h: r => pctH(r['Filter %']), csv: r => r['Filter %'] },
+    { t: 'J / F / L', v: r => Number(r['Juist']), h: r => r['Juist'] + ' / ' + r['Fout'] + ' / ' + r['Leeg'], csv: r => r['Juist'] + '/' + r['Fout'] + '/' + r['Leeg'] },
+    { t: 'Duur (min)', num: true, v: r => Number(r['Duur (min)']) || 0, h: r => nl(Number(r['Duur (min)']) || 0) },
+    { t: 'Venster verlaten', num: true, v: r => Number(r['Venster verlaten']) || 0, h: r => { const n = Number(r['Venster verlaten']) || 0; return n ? '<b class="no">' + n + '×</b>' : '0'; } },
+    { t: 'Ingediend', v: r => r['Tijdstip'] }, { t: 'Opmerking', v: r => r['Opmerking'] || '' },
+    { t: '', v: () => '', h: r => '<button class="btn ghost small" data-reset="' + esc(r['E-mail']) + '">Nieuwe poging</button>', csv: () => '' }]);
+  const redraw = () => {
+    const rows = A.test.filter(r => String(r['Ronde']) === F.ronde && matchF(r['Klas'], r['Niveaugroep'], r['Voornaam'] + ' ' + r['Naam'] + ' ' + r['E-mail'], r['Stroom']) && (!F.geslaagd || r['Geslaagd'] === F.geslaagd));
+    sortTable($('#tres'), rows, cols, state, () => {
+      $$('[data-det]').forEach(b => b.onclick = () => toonDetail(b.dataset.det, F.ronde));
+      $$('[data-reset]').forEach(b => b.onclick = async () => { if (await askConfirm('Het resultaat van deze leerling voor "' + F.ronde + '" wissen, zodat hij of zij de test opnieuw kan maken?', 'Wissen')) admSave('apiAdminResetAttempt', [b.dataset.reset, F.ronde], 'Leerling kan de test opnieuw maken'); });
+    });
+    const key = S.groepPer === 'Niveaugroep' ? 'Niveaugroep' : 'Klas', groups = {}, lijst = key === 'Klas' ? A.klassen : A.niveaugroepen;
+    const leerl = A.leerlingen.filter(l => matchF(l.klas, l.ng, l.voornaam + ' ' + l.naam + ' ' + l.email, l.stroom));
+    rows.forEach(r => { const g = r[key]; (groups[g] = groups[g] || []).push(r); });
+    const gs = Object.keys(groups).sort((a, b) => lijst.indexOf(a) - lijst.indexOf(b));
+    const sumRow = (naam, rs, n) => { const ok = rs.filter(r => r['Geslaagd'] === 'ja').length; return '<tr><th>' + esc(naam) + '</th><td class="num">' + n + '</td><td class="num">' + rs.length + '</td><td class="num">' + ok + '</td><td class="num">' + (rs.length ? Math.round(ok / rs.length * 100) + '%' : '–') + '</td><td class="num">' + gem(rs.map(r => r['Totaal %'])) + '</td>' + HK.map(k => '<td class="num">' + gem(rs.map(r => r[HL[k] + ' %'])) + '</td>').join('') + '<td class="num">' + gem(rs.map(r => r['Filter %'])) + '</td></tr>'; };
+    $('#sum').innerHTML = '<thead><tr><th class="nos">' + key + '</th><th class="nos num">Leerlingen</th><th class="nos num">Getest</th><th class="nos num">Geslaagd</th><th class="nos num">% geslaagd</th><th class="nos num">Gem. totaal</th>' + HK.map(k => '<th class="nos num">' + HL[k] + '</th>').join('') + '<th class="nos num">Filter</th></tr></thead><tbody>' +
+      gs.map(g => sumRow(g, groups[g], leerl.filter(l => (key === 'Klas' ? l.klas : l.ng) === g).length)).join('') + (gs.length > 1 ? sumRow('Totaal', rows, leerl.length) : '') + (!gs.length ? '<tr><td colspan="11" class="muted">Nog geen resultaten voor deze selectie.</td></tr>' : '') + '</tbody>';
+    $('#csv').onclick = () => csv('testresultaten ' + F.ronde, cols.concat([{ t: 'E-mail', v: r => r['E-mail'] }]), rows);
+  };
+  bindFilters(redraw); redraw();
+}
+async function toonDetail(email, ronde) {
+  const dlg = document.createElement('dialog'); dlg.innerHTML = '<div class="dlg"><div class="spinner"></div></div>'; document.body.appendChild(dlg); dlg.showModal();
+  dlg.addEventListener('close', () => dlg.remove());
+  try {
+    const rows = await api('apiAdminTestDetail', email, ronde), l = S.admin.leerlingen.find(x => String(x.email).toLowerCase() === email.toLowerCase()) || {};
+    $('.dlg', dlg).innerHTML = '<div class="row"><h3 style="margin:0">' + esc((l.voornaam || '') + ' ' + (l.naam || email)) + ' · ' + esc(ronde) + '</h3><span class="spacer"></span><button class="btn ghost small" id="dx">Sluiten</button></div><div class="dtwrap" style="margin-top:.8rem"><table class="dt"><thead><tr><th class="nos">Nr</th><th class="nos">Heuristiek</th><th class="nos num">Punten</th><th class="nos">Gegeven</th><th class="nos">Juist</th><th class="nos">Gekozen heuristiek</th><th class="nos">Goed gefilterd</th><th class="nos num">Score</th></tr></thead><tbody>' +
+      rows.map(r => '<tr><td>' + r['Nr'] + '</td><td>' + esc(r['Heuristiek']) + '</td><td class="num">' + r['Punten'] + '</td><td>' + esc(r['Gegeven antwoord'] || '–') + '</td><td>' + esc(r['Juist antwoord']) + '</td><td>' + esc(r['Gekozen heuristiek'] || '–') + '</td><td>' + (r['Heuristiek juist'] ? jaNee(r['Heuristiek juist']) : '–') + '</td><td class="num">' + (Number(r['Score']) > 0 ? '<span class="yes">' + nl(Number(r['Score'])) + '</span>' : '<span class="no">' + nl(Number(r['Score'])) + '</span>') + '</td></tr>').join('') + '</tbody></table></div>';
+    $('#dx', dlg).onclick = () => dlg.close();
+  } catch (e) { $('.dlg', dlg).innerHTML = '<div class="err">' + esc(errMsg(e)) + '</div>'; }
+}
+function admVg() {
+  const A = S.admin, HK = A.hkeys, HL = A.hlabel, nodig = A.settings.vrijgeven_aantal;
+  $('#adm').innerHTML = filterBar({}) + '<div class="card"><h3>Voortgang per leerling</h3><p class="muted" style="margin:.2rem 0 .6rem;font-size:.85rem">Per onderdeel: juist / gemaakt. Groen = genoeg juist om het volgende onderdeel te openen (' + nodig + '). Klik op een naam voor de oefeningen en reeksen van die leerling.</p><div class="dtwrap"><table class="dt" id="tvg"></table></div></div>';
+  const state = S.vgSort || (S.vgSort = { k: 3, dir: 1 });
+  const leeg = [0, 0];
+  const all = A.leerlingen.map(l => { const o = A.voortgang.find(x => String(x.email).toLowerCase() === String(l.email).toLowerCase()) || {}; const r = Object.assign({ stappen: leeg, filter: leeg, reeksen: 0, beste: 0, laatsteReeks: 0, laatste: '' }, o, { email: l.email, voornaam: l.voornaam, naam: l.naam, klas: l.klas, ng: l.ng, stroom: l.stroom }); HK.forEach(k => { r[k] = r[k] || leeg; }); return r; });
+  const jp = p => p[1] ? '<span class="' + (p[0] >= nodig ? 'yes' : '') + '">' + p[0] + '</span> / ' + p[1] : '<span class="muted">–</span>';
+  const onderdeel = (t, f) => ({ t, num: true, v: r => f(r)[0] * 1000 + f(r)[1], h: r => jp(f(r)), csv: r => f(r)[0] + '/' + f(r)[1] });
+  const cols = [{ t: 'Klas', v: r => r.klas }, { t: 'Niveaugroep', v: r => r.ng }, { t: 'Stroom', v: r => r.stroom },
+    { t: 'Familienaam', v: r => r.naam + ' ' + r.voornaam, h: r => '<button class="linkbtn" data-od="' + esc(r.email) + '">' + esc(r.naam) + '</button>', csv: r => r.naam }, { t: 'Voornaam', v: r => r.voornaam + ' ' + r.naam, h: r => esc(r.voornaam), csv: r => r.voornaam },
+    onderdeel('0 Begrijpen', r => r.stappen)].concat(HK.map((k, i) => onderdeel((i + 1) + ' ' + HL[k], r => r[k])), [onderdeel('5 Filter', r => r.filter),
+    { t: 'Reeksen', num: true, v: r => r.reeksen }, { t: 'Beste reeks', num: true, v: r => r.reeksen ? r.beste : -1, h: r => r.reeksen ? nl(r.beste) + '%' : '<span class="muted">–</span>', csv: r => r.reeksen ? r.beste : '' },
+    { t: 'Laatste reeks', num: true, v: r => r.reeksen ? r.laatsteReeks : -1, h: r => r.reeksen ? nl(r.laatsteReeks) + '%' : '<span class="muted">–</span>', csv: r => r.reeksen ? r.laatsteReeks : '' },
+    { t: 'Laatst actief', v: r => r.laatste || '' }]);
+  const redraw = () => {
+    const rows = all.filter(r => matchF(r.klas, r.ng, r.voornaam + ' ' + r.naam + ' ' + r.email, r.stroom));
+    sortTable($('#tvg'), rows, cols, state, () => $$('[data-od]').forEach(b => b.onclick = () => toonOefDetail(b.dataset.od)));
+    $('#csv').onclick = () => csv('voortgang', cols.concat([{ t: 'E-mail', v: r => r.email }]), rows);
+  };
+  bindFilters(redraw); redraw();
+}
+async function toonOefDetail(email) {
+  const dlg = document.createElement('dialog'); dlg.innerHTML = '<div class="dlg"><div class="spinner"></div></div>'; document.body.appendChild(dlg); dlg.showModal();
+  dlg.addEventListener('close', () => dlg.remove());
+  try {
+    const d = await api('apiAdminPracticeDetail', email), rows = d.oefen.reverse(), rk = d.reeksen.reverse();
+    const jn = v => v ? jaNee(v) : '–';
+    $('.dlg', dlg).innerHTML = '<div class="row"><h3 style="margin:0">Oefenwerk van ' + esc(email) + '</h3><span class="spacer"></span><button class="btn ghost small" id="dx">Sluiten</button></div>' +
+      '<p class="stapkop">Kangoeroe-reeksen</p>' + (rk.length ? '<div class="dtwrap"><table class="dt"><thead><tr><th class="nos">Tijdstip</th><th class="nos num">Punten</th><th class="nos num">%</th><th class="nos">J / F / L</th><th class="nos num">Filter</th><th class="nos num">Duur (min)</th></tr></thead><tbody>' +
+        rk.map(r => '<tr><td>' + esc(r['Tijdstip']) + '</td><td class="num">' + nl(Number(r['Punten'])) + ' / ' + r['Maximum'] + '</td><td class="num">' + nl(Number(r['%'])) + '%</td><td>' + r['Juist'] + ' / ' + r['Fout'] + ' / ' + r['Leeg'] + '</td><td class="num">' + pctH(r['Filter %']) + '</td><td class="num">' + nl(Number(r['Duur (min)']) || 0) + '</td></tr>').join('') + '</tbody></table></div>' : '<p class="muted">Nog geen reeksen.</p>') +
+      '<p class="stapkop">Laatste ' + rows.length + ' oefeningen, nieuwste eerst</p><div class="dtwrap"><table class="dt"><thead><tr><th class="nos">Tijdstip</th><th class="nos">Onderdeel</th><th class="nos">Heuristiek</th><th class="nos">Vraag</th><th class="nos">Gekozen heuristiek</th><th class="nos">Goed gefilterd</th><th class="nos">Antwoord</th><th class="nos">Juist</th></tr></thead><tbody>' +
+      rows.map(r => '<tr><td>' + esc(r['Tijdstip']) + '</td><td>' + esc(r['Onderdeel']) + '</td><td>' + esc(r['Heuristiek']) + '</td><td>' + esc(r['Vraag']) + '</td><td>' + esc(r['Gekozen heuristiek'] || '–') + '</td><td>' + jn(r['Heuristiek juist']) + '</td><td>' + esc(r['Antwoord'] || '–') + ' <span class="muted">(' + esc(r['Juist antwoord']) + ')</span></td><td>' + jn(r['Antwoord juist']) + '</td></tr>').join('') + '</tbody></table></div>';
+    $('#dx', dlg).onclick = () => dlg.close();
+  } catch (e) { $('.dlg', dlg).innerHTML = '<div class="err">' + esc(errMsg(e)) + '</div>'; }
+}
+function admLl() {
+  const A = S.admin;
+  $('#adm').innerHTML = filterBar({}) + '<div class="card"><h3>Leerlingen</h3><p class="muted" style="margin:.2rem 0 .6rem;font-size:.85rem">De naam komt uit het schoolaccount; leerlingen kiezen zelf hun klas en niveaugroep bij hun eerste bezoek. De stroom volgt uit de klas (zie Instellingen › B-stroom). Je kan klas, niveaugroep en stroom hier aanpassen, of rechtstreeks in de Google Sheet (tabblad Leerlingen). Wat je in de Sheet verandert, geldt meteen; klik daarna op Vernieuwen.</p><div class="row" style="margin-bottom:.7rem"><button class="btn ghost small" id="syncNames">Namen ophalen uit de schoolaccounts</button><span class="muted" id="syncMsg" style="font-size:.9rem"></span></div><div class="dtwrap"><table class="dt" id="tll"></table></div></div>';
+  const state = S.llSort || (S.llSort = { k: 3, dir: 1 });
+  const sel = (attr, email, lijst, w, lab) => '<select class="sel" ' + attr + '="' + esc(email) + '">' + lijst.map(k => '<option value="' + k + '"' + (k === w ? ' selected' : '') + '>' + (lab ? lab(k) : k) + '</option>').join('') + '</select>';
+  const cols = [{ t: 'Klas', v: r => r.klas, h: r => sel('data-kl', r.email, A.klassen, r.klas), csv: r => r.klas },
+    { t: 'Niveaugroep', v: r => r.ng, h: r => sel('data-ng', r.email, A.niveaugroepen, r.ng), csv: r => r.ng },
+    { t: 'Stroom', v: r => r.stroom, h: r => sel('data-sr', r.email, ['A', 'B'], r.stroom, k => k + '-stroom'), csv: r => r.stroom },
+    { t: 'Familienaam', v: r => r.naam + ' ' + r.voornaam, h: r => esc(r.naam), csv: r => r.naam }, { t: 'Voornaam', v: r => r.voornaam + ' ' + r.naam, h: r => esc(r.voornaam), csv: r => r.voornaam }, { t: 'E-mail', v: r => r.email }, { t: 'Geregistreerd', v: r => r.sinds }];
+  const redraw = () => {
+    const rows = A.leerlingen.filter(r => matchF(r.klas, r.ng, r.voornaam + ' ' + r.naam + ' ' + r.email, r.stroom));
+    const upd = email => { const l = A.leerlingen.find(x => x.email === email), q = a => $('[' + a + '="' + CSS.escape(email) + '"]').value; admSave('apiAdminUpdateStudent', [email, { voornaam: l.voornaam, naam: l.naam, klas: q('data-kl'), ng: q('data-ng'), stroom: q('data-sr') }], 'Leerling aangepast'); };
+    $('#syncNames').onclick = async () => { const b = $('#syncNames'); b.disabled = true; $('#syncMsg').textContent = 'Bezig…';
+      try { const d = await api('apiAdminSyncNames'); S.admin = huidigeGroep(d); viewBeheer(false); toast(d.sync.bijgewerkt + ' namen bijgewerkt' + (d.sync.nietGevonden ? ', ' + d.sync.nietGevonden + ' niet gevonden in de schoolgids' : '')); } catch (e) { b.disabled = false; $('#syncMsg').textContent = ''; showErr(e); } };
+    sortTable($('#tll'), rows, cols, state, () => $$('[data-kl],[data-ng],[data-sr]').forEach(s => s.onchange = () => upd(s.dataset.kl || s.dataset.ng || s.dataset.sr)));
+    $('#csv').onclick = () => csv('leerlingen', cols, rows);
+  };
+  bindFilters(redraw); redraw();
+}
+function sortTable(tbl, rows, cols, state, after) {
+  const draw = () => {
+    const sorted = rows.slice();
+    if (state.k !== undefined) { const c = cols[state.k]; sorted.sort((a, b) => { const x = c.v(a), y = c.v(b); const r = (typeof x === 'number' && typeof y === 'number') ? x - y : String(x).localeCompare(String(y), 'nl', { numeric: true }); return state.dir * r; }); }
+    tbl.innerHTML = '<thead><tr>' + cols.map((c, i) => '<th' + (c.num ? ' class="num"' : '') + ' data-k="' + i + '"' + (state.k === i ? ' aria-sort="' + (state.dir > 0 ? 'ascending' : 'descending') + '"' : '') + '>' + esc(c.t) + '</th>').join('') + '</tr></thead><tbody>' +
+      (sorted.length ? sorted.map(r => '<tr>' + cols.map(c => '<td' + (c.num ? ' class="num"' : '') + '>' + (c.h ? c.h(r) : esc(c.v(r))) + '</td>').join('') + '</tr>').join('') : '<tr><td colspan="' + cols.length + '" class="muted">Geen gegevens voor deze selectie.</td></tr>') + '</tbody>';
+    $$('th[data-k]', tbl).forEach(th => th.onclick = () => { const k = Number(th.dataset.k); state.dir = state.k === k ? -state.dir : 1; state.k = k; draw(); });
+    if (after) after();
+  };
+  draw();
+}
+function csv(name, cols, rows) {
+  const q = v => { const s = String(v === undefined || v === null ? '' : v); return /[";\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const txt = '﻿' + [cols.map(c => q(c.t)).join(';')].concat(rows.map(r => cols.map(c => q(c.csv ? c.csv(r) : c.v(r))).join(';'))).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/csv;charset=utf-8' })); a.download = name + '.csv'; a.click();
+}
+
+/* inklapbare linkerkolom: de keuze wordt onthouden op dit toestel */
+(function () {
+  const KEY = 'heur_navCollapsed', b = document.getElementById('navToggle'); if (!b) return;
+  const t = b.querySelector('.t');
+  function apply(c) { document.body.classList.toggle('nav-collapsed', c); b.setAttribute('aria-expanded', String(!c));
+    const lab = c ? 'Toon de onderdelen' : 'Verberg de onderdelen'; t.textContent = lab; b.title = lab; b.setAttribute('aria-label', lab); }
+  let c = false; try { c = localStorage.getItem(KEY) === '1'; } catch (e) { }
+  apply(c);
+  b.addEventListener('click', () => { c = !c; apply(c); try { localStorage.setItem(KEY, c ? '1' : '0'); } catch (e) { }
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 280); });
+})();
+/* voorlezen: standaard uit; aan = geselecteerde tekst wordt voorgelezen met een Nederlandstalige (bij voorkeur mannelijke) stem */
+(function () {
+  const toast = document.getElementById('ttsToast'), ok = document.getElementById('ttsOk');
+  const synth = window.speechSynthesis;
+  if (!synth) { document.getElementById('ttsBtn').hidden = true; document.head.insertAdjacentHTML('beforeend', '<style>.tts-inline{display:none!important}</style>'); return; }
+  let on = false, voice = null, last = '', timer = 0, hideT = 0;
+  const MALE = /arnaud|bart|frank|maarten|xander|ruben|daan|willem|hannes|stijn|thomas|male|man\b/i;
+  function pickVoice() {
+    const vs = synth.getVoices().filter(v => /^nl/i.test(v.lang));
+    const be = vs.filter(v => /nl[-_]BE/i.test(v.lang));
+    voice = be.find(v => MALE.test(v.name)) || vs.find(v => MALE.test(v.name)) || be[0] || vs.find(v => /nl[-_]NL/i.test(v.lang)) || vs[0] || null;
+  }
+  pickVoice(); if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
+  function speak(t) {
+    synth.cancel(); if (!t) return;
+    const u = new SpeechSynthesisUtterance(t.replace(/\s+/g, ' '));
+    if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'nl-BE'; }
+    u.rate = .95; u.pitch = 1; synth.speak(u);
+  }
+  function showToast() { toast.hidden = false; clearTimeout(hideT); hideT = setTimeout(() => { toast.hidden = true; }, 12000); }
+  function set(v) {
+    on = v;
+    document.querySelectorAll('#ttsBtn, .tts-inline').forEach(b => { b.setAttribute('aria-pressed', String(on)); b.querySelector('.t').textContent = 'Voorlezen: ' + (on ? 'aan' : 'uit'); });
+    if (on) { showToast(); } else { synth.cancel(); toast.hidden = true; last = ''; }
+  }
+  document.addEventListener('click', e => { if (e.target.closest('#ttsBtn, .tts-inline')) set(!on); });
+  ok.addEventListener('click', () => { toast.hidden = true; });
+  function check() { clearTimeout(timer); timer = setTimeout(() => { if (!on) return; const t = String(window.getSelection ? window.getSelection() : '').trim(); if (t.length > 1 && t !== last) { last = t; speak(t); } }, 250); }
+  document.addEventListener('mouseup', check); document.addEventListener('touchend', check); document.addEventListener('keyup', e => { if (e.shiftKey) check(); });
+  document.addEventListener('selectionchange', () => { if (on && !String(window.getSelection()).trim()) last = ''; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && on) synth.cancel(); });
+  window.TTS = { on: () => on, set };
+  set(false);
+})();
+
+start();
+</script>
+</body>
+</html>
